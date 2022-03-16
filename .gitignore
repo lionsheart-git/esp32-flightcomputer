@@ -1,3 +1,14 @@
+# Platformio files
+.pio/
+CMakeListsPrivate.txt
+
+# CLion build directoies
+cmake-build-*/
+.idea/
+
+# Doxygen directories
+html/
+
 # Prerequisites
 *.d
 
