@@ -4,8 +4,6 @@
 
 #include "Logging/SystemLogger.hpp"
 
-std::list<GNSSSensor *> SensorData::gnssSensors_;
-
 void SensorData::SmartDelay(unsigned long ms)
 {
     unsigned long start = millis();
@@ -14,58 +12,39 @@ void SensorData::SmartDelay(unsigned long ms)
         // Call ReadSerial for all GPS objects
     } while (millis() - start < ms);
 }
+
 //@todo Figure out whether to use exceptions or return codes to signal invalid readings
 uint32_t SensorData::Satellites()
 {
     uint32_t satellites = 0;
-    for (auto & sensor : gnssSensors_) {
-        if (sensor->gps_.satellites.isValid()) {
-            satellites += sensor->gps_.satellites.value();
-        }
-    }
 
-    return satellites / gnssSensors_.size();
+    return satellites;
 }
 
 int32_t SensorData::HDOP()
 {
     int32_t hdop = 0;
-    for (auto & sensor : gnssSensors_) {
-        if (sensor->gps_.hdop.isValid()) {
-            hdop += sensor->gps_.hdop.value();
-        }
-    }
 
-    return hdop / gnssSensors_.size();
+    return hdop;
 }
 
 double SensorData::Latitude()
 {
     double latitude = 0;
-    for (auto & sensor : gnssSensors_) {
-        if (sensor->gps_.location.isValid()) {
-            latitude += sensor->gps_.location.lat();
-        }
-    }
 
-    return latitude / gnssSensors_.size();
+    return latitude;
 }
 
 double SensorData::Longitude()
 {
     double longitude = 0;
-    for (auto & sensor : gnssSensors_) {
-        if (sensor->gps_.location.isValid()) {
-            longitude += sensor->gps_.location.lng();
-        }
-    }
 
-    return longitude / gnssSensors_.size();
+    return longitude;
 }
 
-uint32_t SensorData::Time()
+Time_t SensorData::Time()
 {
-    return 0;
+    return Time_t();
 }
 
 uint8_t SensorData::Hour()
@@ -127,19 +106,3 @@ float SensorData::Lux()
 {
     return 0;
 }
-
-bool SensorData::RegisterSensor(GNSSSensor * sensor)
-{
-    SensorData::gnssSensors_.push_back(sensor);
-    slog_d("Registered GNSS Sensor id %d", sensor->Id());
-    return true;
-}
-
-bool SensorData::DeregisterSensor(GNSSSensor *sensor)
-{
-    SensorData::gnssSensors_.remove(sensor);
-    slog_d("Deregistered GNSS Sensor id %d", sensor->Id());
-    return false;
-}
-
-

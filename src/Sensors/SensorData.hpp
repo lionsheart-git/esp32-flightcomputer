@@ -4,8 +4,11 @@
 #include <stdint.h>
 #include <list>
 
-#include "GNSSSensor.hpp"
-#include "ITimeSensor.hpp"
+typedef struct Time {
+    uint8_t hour;
+    uint8_t minute;
+    uint8_t second;
+} Time_t;
 
 class SensorData
 {
@@ -34,13 +37,6 @@ public:
     float Humidity();
     float UV();
     float Lux();
-
-    static bool RegisterSensor(GNSSSensor * sensor);
-    static bool DeregisterSensor(GNSSSensor * sensor);
-
-private:
-    static std::list<GNSSSensor *> gnssSensors_;
-
 };
 
 
