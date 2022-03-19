@@ -3,22 +3,61 @@
 #include <Arduino.h>
 
 #include "Logging/SystemLogger.hpp"
+#include "Logging/DataLogger.hpp"
+
+SensorData::SensorData()
+: gpsSerial_(2), i2c_(2)
+{
+    // Initialize i2c connection
+    if (!Wire.begin(I2C_SDA, I2C_SCL)) {
+        slog_e("Error initializing I2C connection on SDA %d SCL %d. Check wiring.", I2C_SDA, I2C_SCL);
+    }
+
+    // Initialize real time clock
+    if(!rtc_.begin()) {
+        slog_e("Error initializing RTC.");
+    }
+
+    if (rtc_.lostPower()) {
+        slog_w("RTC lost power, setting time to compile time.");
+        // When time needs to be set on a new device, or after a power loss, the
+        // following line sets the RTC to the date & time this sketch was compiled
+        rtc_.adjust(DateTime(__DATE__, __TIME__));
+    }
+
+    // Initialize Bmp388
+    if (!bmp_.begin_I2C()) {
+        slog_e("Error initializing BMP388. ADDR: 0x77.");
+    }
+
+    // Initialize GPS serial
+    gpsSerial_.begin(9600, SERIAL_8N1, GPS_RX, GPS_TX);
+
+    SmartDelay(100);
+}
 
 void SensorData::SmartDelay(unsigned long ms)
 {
     unsigned long start = millis();
     do
     {
-        // Call ReadSerial for all GPS objects
+        while (gpsSerial_.available())
+        {
+            gps_.encode(gpsSerial_.read());
+        }
     } while (millis() - start < ms);
+
 }
 
 //@todo Figure out whether to use exceptions or return codes to signal invalid readings
 uint32_t SensorData::Satellites()
 {
-    uint32_t satellites = 0;
 
-    return satellites;
+    if (!gps_.satellites.isValid()) {
+        slog_w("Invalid gps satellites value.");
+    }
+
+    return gps_.satellites.value();
 }
 
 int32_t SensorData::HDOP()
@@ -42,9 +81,9 @@ double SensorData::Longitude()
     return longitude;
 }
 
-Time_t SensorData::Time()
+DateTime SensorData::Time()
 {
-    return Time_t();
+    return rtc_.now();
 }
 
 uint8_t SensorData::Hour()
