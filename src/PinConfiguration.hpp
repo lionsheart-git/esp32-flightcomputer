@@ -19,7 +19,10 @@
 #define SD_MISO 32 /**< @brief SD miso pin */
 #define SD_MOSI 33 /**< @brief SD mosi pin */
 
-#define GPS_RX 36 /**< @brief GPS rx pin */
-#define GPS_TX 37 /**<@brief GPS tx pin */
+#define GPS_RX 32 /**< @brief GPS rx pin */
+#define GPS_TX 33 /**<@brief GPS tx pin */
+
+#define I2C_SDA 25
+#define I2C_SCL 26
 
 #endif //FLIGHTCOMPUTER_PINCONFIGURATION_HPP
