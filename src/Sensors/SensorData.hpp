@@ -16,6 +16,7 @@ class SensorData
 {
 public:
     SensorData();
+    void Begin();
 
     void SmartDelay(unsigned long ms);
 
@@ -34,8 +35,10 @@ public:
     uint16_t Year();
     uint8_t Month();
     uint8_t Day();
+    const char * Timestamp();
 
     // Environment
+    double Pressure();
     double Altitude();
     float Temperature();
     float Humidity();
@@ -47,8 +50,10 @@ private:
     Adafruit_BMP3XX bmp_;
     TinyGPSPlus gps_;
     HardwareSerial gpsSerial_;
-    TwoWire i2c_;
+    // TwoWire i2c_;
 };
+
+extern SensorData Sensors;
 
 
 #endif //FLIGHTCOMPUTER_SENSORDATA_HPP

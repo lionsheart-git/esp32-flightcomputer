@@ -6,29 +6,34 @@
 #include "Logging/DataLogger.hpp"
 
 SensorData::SensorData()
-: gpsSerial_(2), i2c_(2)
+        : gpsSerial_(2)
+{}
+
+void SensorData::Begin()
 {
-    // Initialize i2c connection
-    if (!Wire.begin(I2C_SDA, I2C_SCL)) {
-        slog_e("Error initializing I2C connection on SDA %d SCL %d. Check wiring.", I2C_SDA, I2C_SCL);
+    Wire.setPins(I2C_SDA, I2C_SCL);
+
+    if (!rtc_.begin())
+    {
+        slog_e("Couldn't find RTC");
     }
 
-    // Initialize real time clock
-    if(!rtc_.begin()) {
-        slog_e("Error initializing RTC.");
-    }
-
-    if (rtc_.lostPower()) {
+    if (!rtc_.lostPower())
+    {
         slog_w("RTC lost power, setting time to compile time.");
-        // When time needs to be set on a new device, or after a power loss, the
-        // following line sets the RTC to the date & time this sketch was compiled
-        rtc_.adjust(DateTime(__DATE__, __TIME__));
+        rtc_.adjust(DateTime(F(__DATE__), F(__TIME__)));
     }
 
-    // Initialize Bmp388
-    if (!bmp_.begin_I2C()) {
-        slog_e("Error initializing BMP388. ADDR: 0x77.");
+    if (!bmp_.begin_I2C())
+    {
+        slog_e("Error initializing BMP388 via I2C. ADDR: 0x77.");
     }
+
+    // Set up oversampling and filter initialization
+    bmp_.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
+    bmp_.setPressureOversampling(BMP3_OVERSAMPLING_4X);
+    bmp_.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
+    bmp_.setOutputDataRate(BMP3_ODR_50_HZ);
 
     // Initialize GPS serial
     gpsSerial_.begin(9600, SERIAL_8N1, GPS_RX, GPS_TX);
@@ -53,7 +58,8 @@ void SensorData::SmartDelay(unsigned long ms)
 uint32_t SensorData::Satellites()
 {
 
-    if (!gps_.satellites.isValid()) {
+    if (!gps_.satellites.isValid())
+    {
         slog_w("Invalid gps satellites value.");
     }
 
@@ -121,14 +127,24 @@ uint8_t SensorData::Day()
     return 0;
 }
 
+const char *SensorData::Timestamp()
+{
+    return rtc_.now().timestamp().c_str();
+}
+
+double SensorData::Pressure()
+{
+    return bmp_.readPressure();
+}
+
 double SensorData::Altitude()
 {
-    return 0;
+    return bmp_.readAltitude(1032);
 }
 
 float SensorData::Temperature()
 {
-    return 0;
+    return bmp_.readTemperature();
 }
 
 float SensorData::Humidity()
@@ -145,3 +161,5 @@ float SensorData::Lux()
 {
     return 0;
 }
+
+SensorData Sensors = SensorData();
