@@ -18,7 +18,7 @@ void SensorData::Begin()
         slog_e("Couldn't find RTC");
     }
 
-    if (!rtc_.lostPower())
+    if (rtc_.lostPower())
     {
         slog_w("RTC lost power, setting time to compile time.");
         rtc_.adjust(DateTime(F(__DATE__), F(__TIME__)));
