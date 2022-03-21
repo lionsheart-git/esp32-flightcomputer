@@ -1,8 +1,5 @@
 #include <Arduino.h>
 
-#include <sys/time.h>
-
-
 #include "Logging/SystemLogger.hpp"
 #include "Logging/DataLogger.hpp"
 
@@ -16,14 +13,14 @@
 void setup()
 {
     Serial.begin(115200);
+    // Init SD Card on correct SPI port.
+    SDCard::Begin();
+
     Sensors.Begin();
 
 #ifndef ESP8266
     while (!Serial); // wait for serial port to connect. Needed for native USB
 #endif
-
-    // Init SD Card on correct SPI port.
-    SDCard::Begin();
 }
 
 void loop()
