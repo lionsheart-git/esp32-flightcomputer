@@ -28,11 +28,11 @@ void setup()
 
 void loop()
 {
-    dlogn("Sats: %d", Sensors.Satellites());
+    dlogn("Sats: %d", Sensors.GNSS_Satellites());
 
     UtilityFunctions::ScanI2CDevice();
 
-    dlogn("%s", Sensors.Timestamp());
+    dlogn("%s", Sensors.RTC_Timestamp());
 
     dlogn("Temperature: %.2f *C", Sensors.Temperature());
     dlogn("Pressure: %0.2f hPa", Sensors.Pressure() / 100);

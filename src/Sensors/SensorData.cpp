@@ -48,14 +48,13 @@ void SensorData::SmartDelay(unsigned long ms)
     {
         while (gpsSerial_.available())
         {
-            gps_.encode(gpsSerial_.read());
+            SensorData::gps_.encode(gpsSerial_.read());
         }
     } while (millis() - start < ms);
-
 }
 
 //@todo Figure out whether to use exceptions or return codes to signal invalid readings
-uint32_t SensorData::Satellites()
+uint32_t SensorData::GNSS_Satellites()
 {
 
     if (!gps_.satellites.isValid())
@@ -66,68 +65,68 @@ uint32_t SensorData::Satellites()
     return gps_.satellites.value();
 }
 
-int32_t SensorData::HDOP()
+int32_t SensorData::GNSS_HDOP()
 {
     int32_t hdop = 0;
 
     return hdop;
 }
 
-double SensorData::Latitude()
+double SensorData::GNSS_Latitude()
 {
     double latitude = 0;
 
     return latitude;
 }
 
-double SensorData::Longitude()
+double SensorData::GNSS_Longitude()
 {
     double longitude = 0;
 
     return longitude;
 }
 
-DateTime SensorData::Time()
+DateTime SensorData::RTC_Time()
 {
     return rtc_.now();
 }
 
-uint8_t SensorData::Hour()
+uint8_t SensorData::RTC_Hour()
 {
     return 0;
 }
 
-uint8_t SensorData::Minute()
+uint8_t SensorData::RTC_Minute()
 {
     return 0;
 }
 
-uint8_t SensorData::Second()
+uint8_t SensorData::RTC_Second()
 {
     return 0;
 }
 
-uint32_t SensorData::Date()
+uint32_t SensorData::RTC_Date()
 {
     return 0;
 }
 
-uint16_t SensorData::Year()
+uint16_t SensorData::RTC_Year()
 {
     return 0;
 }
 
-uint8_t SensorData::Month()
+uint8_t SensorData::RTC_Month()
 {
     return 0;
 }
 
-uint8_t SensorData::Day()
+uint8_t SensorData::RTC_Day()
 {
     return 0;
 }
 
-const char *SensorData::Timestamp()
+const char *SensorData::RTC_Timestamp()
 {
     return rtc_.now().timestamp().c_str();
 }

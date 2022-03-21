@@ -20,22 +20,22 @@ public:
 
     void SmartDelay(unsigned long ms);
 
-    //GNSS
-    uint32_t Satellites();
-    int32_t HDOP();
-    double Latitude();
-    double Longitude();
+    uint32_t GNSS_Satellites();
+    int32_t GNSS_HDOP();
+    double GNSS_Latitude();
+    double GNSS_Longitude();
+
 
     // Date and time
-    DateTime Time();
-    uint8_t Hour();
-    uint8_t Minute();
-    uint8_t Second();
-    uint32_t Date();
-    uint16_t Year();
-    uint8_t Month();
-    uint8_t Day();
-    const char * Timestamp();
+    DateTime RTC_Time();
+    uint8_t RTC_Hour();
+    uint8_t RTC_Minute();
+    uint8_t RTC_Second();
+    uint32_t RTC_Date();
+    uint16_t RTC_Year();
+    uint8_t RTC_Month();
+    uint8_t RTC_Day();
+    const char * RTC_Timestamp();
 
     // Environment
     double Pressure();
