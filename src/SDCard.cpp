@@ -21,7 +21,7 @@ bool SDCard::initSuccessful = false;
  */
 void SDCard::Begin()
 {
-    SPI.begin(SD_SCK, SD_MISO, SD_MOSI, SD_CS);
+    SPI.begin(SD_SCK, SD_MISO, SD_MOSI);
 
     if (!SD.begin(SD_CS))
     {
@@ -40,6 +40,8 @@ void SDCard::Begin()
     }
 
     initSuccessful = true;
+
+    slog_i("Hello SD card.");
 }
 
 /**
@@ -195,7 +197,8 @@ void SDCard::AppendFile(fs::FS &fs, const char *path, const char *message)
         slog_e("Failed to open file %s for appending %s.", path, message);
         return;
     }
-    if (file.print(message))
+
+    if (file.print(message) == 0)
     {
         initSuccessful = false;
         slog_e("Append %s to %s failed.", message, path);
