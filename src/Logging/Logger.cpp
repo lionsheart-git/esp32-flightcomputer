@@ -41,7 +41,7 @@ namespace Logging
     /**
      * @brief General log function that logs to serial and sd card.
      *
-     * Adaptation of log_printf from esp32-hal-log.h.
+     * At the moment only works up to 255 bytes. Adaptation of log_printf from esp32-hal-log.h.
      *
      * @param path Path to file on SD card.
      * @param format Format string.
@@ -51,25 +51,30 @@ namespace Logging
      */
     int Logger::Log(const char *path, const char *format, ...)
     {
-
-        static char loc_buf[64];
+        printf("Format string: %s", format);
+        static char loc_buf[256];
         char *temp = loc_buf;
-        int len;
-        va_list arg;
-        va_list copy;
-        va_start(arg, format);
-        va_copy(copy, arg);
-        len = vsnprintf(NULL, 0, format, arg);
-        va_end(copy);
-        if (len >= sizeof(loc_buf))
-        {
-            temp = (char *) malloc(len + 1);
-            if (temp == NULL)
-            {
-                return 0;
-            }
-        }
-        vsnprintf(temp, len + 1, format, arg);
+        int len = 255;
+        va_list args;
+        va_start(args, format);
+//        len = vsnprintf(NULL, 0, format, arg);
+//        va_end(arg);
+//
+//        printf("len: %d", len);
+//
+//        if (len >= sizeof(loc_buf))
+//        {
+//            printf("Creating new array.\n");
+//            temp = (char *) malloc(len + 1);
+//            if (temp == NULL)
+//            {
+//                return 0;
+//            }
+//        }
+//
+//        va_start(arg, format);
+        vsnprintf(temp, len + 1, format, args);
+        va_end(args);
 
         // Write to Serial (UART)
         printf("%s", temp);
@@ -80,7 +85,6 @@ namespace Logging
             SDCard::AppendFile(SD, path, temp);
         }
 
-        va_end(arg);
         if (len >= sizeof(loc_buf))
         {
             free(temp);
