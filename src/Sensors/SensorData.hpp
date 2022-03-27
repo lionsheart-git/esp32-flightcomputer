@@ -25,18 +25,6 @@ public:
     double GNSS_Latitude();
     double GNSS_Longitude();
 
-
-    // Date and time
-    DateTime RTC_Time();
-    uint8_t RTC_Hour();
-    uint8_t RTC_Minute();
-    uint8_t RTC_Second();
-    uint32_t RTC_Date();
-    uint16_t RTC_Year();
-    uint8_t RTC_Month();
-    uint8_t RTC_Day();
-    const char * RTC_Timestamp();
-
     // Environment
     double Pressure();
     double Altitude();

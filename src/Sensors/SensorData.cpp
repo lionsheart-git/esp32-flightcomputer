@@ -86,51 +86,6 @@ double SensorData::GNSS_Longitude()
     return longitude;
 }
 
-DateTime SensorData::RTC_Time()
-{
-    return rtc_.now();
-}
-
-uint8_t SensorData::RTC_Hour()
-{
-    return 0;
-}
-
-uint8_t SensorData::RTC_Minute()
-{
-    return 0;
-}
-
-uint8_t SensorData::RTC_Second()
-{
-    return 0;
-}
-
-uint32_t SensorData::RTC_Date()
-{
-    return 0;
-}
-
-uint16_t SensorData::RTC_Year()
-{
-    return 0;
-}
-
-uint8_t SensorData::RTC_Month()
-{
-    return 0;
-}
-
-uint8_t SensorData::RTC_Day()
-{
-    return 0;
-}
-
-const char *SensorData::RTC_Timestamp()
-{
-    return rtc_.now().timestamp().c_str();
-}
-
 double SensorData::Pressure()
 {
     return bmp_.readPressure();
