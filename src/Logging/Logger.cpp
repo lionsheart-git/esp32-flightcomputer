@@ -51,7 +51,6 @@ namespace Logging
      */
     int Logger::Log(const char *path, const char *format, ...)
     {
-        printf("Format string: %s", format);
         static char loc_buf[256];
         char *temp = loc_buf;
         int len = 255;
