@@ -6,7 +6,7 @@
 
 #include <RTClib.h>
 #include <TinyGPS++.h>
-#include <Adafruit_BMP3XX.h>
+#include "BMP388.hpp"
 #include <HardwareSerial.h>
 #include <Wire.h>
 
@@ -19,6 +19,8 @@ public:
     void Begin();
 
     void SmartDelay(unsigned long ms);
+    void UpdateData();
+    bool Calibrate();
 
     uint32_t GNSS_Satellites();
     int32_t GNSS_HDOP();
@@ -34,8 +36,7 @@ public:
     float Lux();
 
 private:
-    RTC_DS3231 rtc_;
-    Adafruit_BMP3XX bmp_;
+    BMP388 bmp_;
     TinyGPSPlus gps_;
     HardwareSerial gpsSerial_;
     // TwoWire i2c_;

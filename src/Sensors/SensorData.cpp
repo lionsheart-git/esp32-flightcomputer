@@ -7,23 +7,11 @@
 
 SensorData::SensorData()
         : gpsSerial_(2)
-{}
+{
+}
 
 void SensorData::Begin()
 {
-    Wire.setPins(I2C_SDA, I2C_SCL);
-
-    if (!rtc_.begin())
-    {
-        slog_e("Couldn't find RTC");
-    }
-
-    if (rtc_.lostPower())
-    {
-        slog_w("RTC lost power, setting time to compile time.");
-        rtc_.adjust(DateTime(F(__DATE__), F(__TIME__)));
-    }
-
     if (!bmp_.begin_I2C())
     {
         slog_e("Error initializing BMP388 via I2C. ADDR: 0x77.");
@@ -38,7 +26,11 @@ void SensorData::Begin()
     // Initialize GPS serial
     gpsSerial_.begin(9600, SERIAL_8N1, GPS_RX, GPS_TX);
 
-    SmartDelay(100);
+    SmartDelay(5000);
+    if (gps_.charsProcessed() < 10)
+    {
+        slog_e("No GPS data received: check wiring");
+    }
 }
 
 void SensorData::SmartDelay(unsigned long ms)
@@ -114,6 +106,31 @@ float SensorData::UV()
 float SensorData::Lux()
 {
     return 0;
+}
+
+bool SensorData::Calibrate()
+{
+    slog_i("Starting sensor calibration");
+    unsigned long start = millis();
+    bool success = false;
+    while (!success)
+    {
+        if (bmp_.Calibrate())
+        {
+            success = true;
+        }
+        SmartDelay(100);
+    }
+
+    slog_i("Ground level pressure: %f Pa", bmp_.GroundLevelPressure);
+
+    slog_i("Sensor calibration took: %ld", millis() - start);
+    return true;
+}
+
+void SensorData::UpdateData()
+{
+    bmp_.performReading();
 }
 
 SensorData Sensors = SensorData();
