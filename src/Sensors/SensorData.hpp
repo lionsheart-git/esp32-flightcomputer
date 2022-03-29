@@ -29,7 +29,8 @@ public:
 
     // Environment
     double Pressure();
-    double Altitude();
+    double AltitudeAboveGround();
+    double AltitudeAboveSeaLevel();
     float Temperature();
 
 private:

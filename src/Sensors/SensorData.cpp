@@ -90,7 +90,33 @@ double SensorData::Altitude()
 
 float SensorData::Temperature()
 {
-    return bmp_.readTemperature();
+    return bmp_.temperature;
+}
+
+/**
+ * @brief Calculates the altitude above ground level in meters.
+ *
+ * Only works throughout the Troposphere up to 11km.
+ * Data first needs to be updated through UpdateData().
+ *
+ * @return[m] The current altitude above ground.
+ */
+double SensorData::AltitudeAboveGround()
+{
+    return BarometricSensor::Altitude(bmp_.pressure, bmp_.GroundLevelPressure);
+}
+
+/**
+ * @brief Calculates the altitude above sea level in meters.
+ *
+ * Currently done with standard pressure of 1013.25. Should later be changed
+ * when pressure at sea level is calculated at current location.
+ *
+ * @return[m] The current altitude at sea level at sea levels in m.
+ */
+double SensorData::AltitudeAboveSeaLevel()
+{
+    return BarometricSensor::Altitude(bmp_.pressure);
 }
 
 bool SensorData::Calibrate()
