@@ -31,9 +31,6 @@ public:
     double Pressure();
     double Altitude();
     float Temperature();
-    float Humidity();
-    float UV();
-    float Lux();
 
 private:
     BMP388 bmp_;

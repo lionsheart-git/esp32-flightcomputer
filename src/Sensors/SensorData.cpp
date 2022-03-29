@@ -93,21 +93,6 @@ float SensorData::Temperature()
     return bmp_.readTemperature();
 }
 
-float SensorData::Humidity()
-{
-    return 0;
-}
-
-float SensorData::UV()
-{
-    return 0;
-}
-
-float SensorData::Lux()
-{
-    return 0;
-}
-
 bool SensorData::Calibrate()
 {
     slog_i("Starting sensor calibration");
