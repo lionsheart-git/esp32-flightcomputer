@@ -4,12 +4,16 @@
 
 #include "Logging/SystemLogger.hpp"
 #include "Logging/DataLogger.hpp"
+#include "BarometricSensor.hpp"
 
 SensorData::SensorData()
         : gpsSerial_(2)
 {
 }
 
+/**
+ * @brief Starts all sensors.
+ */
 void SensorData::Begin()
 {
     if (!bmp_.begin_I2C())
@@ -33,6 +37,13 @@ void SensorData::Begin()
     }
 }
 
+/**
+ * @brief Delay that keeps feeding TinyGPS the GNSS data.
+ *
+ * Should always be used if a GNSS module ist connected.
+ *
+ * @param ms Milliseconds the delay should be.
+ */
 void SensorData::SmartDelay(unsigned long ms)
 {
     unsigned long start = millis();
@@ -45,7 +56,46 @@ void SensorData::SmartDelay(unsigned long ms)
     } while (millis() - start < ms);
 }
 
+/**
+ * @brief Calibrates all sensors if they need to.
+ *
+ * @return True, if all sensors are successfully calibrated.
+ */
+bool SensorData::Calibrate()
+{
+    slog_i("Starting sensor calibration");
+    unsigned long start = millis();
+    bool success = false;
+    while (!success)
+    {
+        if (bmp_.Calibrate())
+        {
+            success = true;
+        }
+        SmartDelay(100);
+    }
+
+    slog_i("Ground level pressure: %f Pa", bmp_.GroundLevelPressure);
+
+    slog_i("Sensor calibration took: %ld", millis() - start);
+    return true;
+}
+
+/**
+ * Updates the data of all sensors to the newest version.
+ */
+void SensorData::UpdateData()
+{
+    bmp_.performReading();
+}
+
 //@todo Figure out whether to use exceptions or return codes to signal invalid readings
+
+/**
+ * @brief Returns the current number of satellites used by the GNSS.
+ *
+ * @return Number of satellites in use.
+ */
 uint32_t SensorData::GNSS_Satellites()
 {
 
@@ -57,6 +107,13 @@ uint32_t SensorData::GNSS_Satellites()
     return gps_.satellites.value();
 }
 
+/**
+ * @brief Returns the Horizontal Dilution Of Precision (HDOP).
+ *
+ * The smaller the better.
+ *
+ * @return The HDOP of the current GNSS signal.
+ */
 int32_t SensorData::GNSS_HDOP()
 {
     int32_t hdop = 0;
@@ -64,6 +121,11 @@ int32_t SensorData::GNSS_HDOP()
     return hdop;
 }
 
+/**
+ * @brief Current latitude.
+ *
+ * @return The current latitude.
+ */
 double SensorData::GNSS_Latitude()
 {
     double latitude = 0;
@@ -71,6 +133,11 @@ double SensorData::GNSS_Latitude()
     return latitude;
 }
 
+/**
+ * @brief Current longitude.
+ *
+ * @return The current longitude.
+ */
 double SensorData::GNSS_Longitude()
 {
     double longitude = 0;
@@ -78,16 +145,25 @@ double SensorData::GNSS_Longitude()
     return longitude;
 }
 
+/**
+ * @brief Returns the pressure of the BMP388.
+ *
+ * Need to call UpdateData() to update to latest data first.
+ *
+ * @return Pressure of the BMP388.
+ */
 double SensorData::Pressure()
 {
-    return bmp_.readPressure();
+    return bmp_.pressure;
 }
 
-double SensorData::Altitude()
-{
-    return bmp_.readAltitude(1032);
-}
-
+/**
+ * @brief Get the temperature of the barometric sensor.
+ *
+ * Need to call UpdateData() to update to latest data first.
+ *
+ * @return
+ */
 float SensorData::Temperature()
 {
     return bmp_.temperature;
@@ -119,29 +195,5 @@ double SensorData::AltitudeAboveSeaLevel()
     return BarometricSensor::Altitude(bmp_.pressure);
 }
 
-bool SensorData::Calibrate()
-{
-    slog_i("Starting sensor calibration");
-    unsigned long start = millis();
-    bool success = false;
-    while (!success)
-    {
-        if (bmp_.Calibrate())
-        {
-            success = true;
-        }
-        SmartDelay(100);
-    }
-
-    slog_i("Ground level pressure: %f Pa", bmp_.GroundLevelPressure);
-
-    slog_i("Sensor calibration took: %ld", millis() - start);
-    return true;
-}
-
-void SensorData::UpdateData()
-{
-    bmp_.performReading();
-}
 
 SensorData Sensors = SensorData();
