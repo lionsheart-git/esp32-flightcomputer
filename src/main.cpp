@@ -9,11 +9,17 @@
 #include "SDCard.hpp"
 
 #include "Sensors/SensorData.hpp"
+#include "RealTimeClock.hpp"
 
 void setup()
 {
     Serial.begin(115200);
     // Init SD Card on correct SPI port.
+    Wire.setPins(I2C_SDA1, I2C_SCL1);
+
+    // Start RealTimeClock
+    RTC.Begin();
+
     SDCard::Begin();
 
     Sensors.Begin();

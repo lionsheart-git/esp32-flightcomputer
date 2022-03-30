@@ -16,16 +16,18 @@ SensorData::SensorData()
  */
 void SensorData::Begin()
 {
-    if (!bmp_.begin_I2C())
+    Wire1.setPins(I2C_SDA2, I2C_SCL2);
+
+    if (!bmp_.begin_I2C(0x77, &Wire1))
     {
         slog_e("Error initializing BMP388 via I2C. ADDR: 0x77.");
     }
 
     // Set up oversampling and filter initialization
-    bmp_.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
-    bmp_.setPressureOversampling(BMP3_OVERSAMPLING_4X);
+    bmp_.setTemperatureOversampling(BMP3_OVERSAMPLING_2X);
+    bmp_.setPressureOversampling(BMP3_OVERSAMPLING_8X);
     bmp_.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
-    bmp_.setOutputDataRate(BMP3_ODR_50_HZ);
+    bmp_.setOutputDataRate(BMP3_ODR_100_HZ);
 
     // Initialize GPS serial
     gpsSerial_.begin(9600, SERIAL_8N1, GPS_RX, GPS_TX);
@@ -179,6 +181,7 @@ float SensorData::Temperature()
  */
 double SensorData::AltitudeAboveGround()
 {
+    printf("Altitude above ground calculation with pressure: %f and GLP: %f.\n", bmp_.pressure, bmp_.GroundLevelPressure);
     return BarometricSensor::Altitude(bmp_.pressure, bmp_.GroundLevelPressure);
 }
 
