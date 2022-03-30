@@ -3,8 +3,6 @@
 #include "Logging/SystemLogger.hpp"
 #include "Logging/DataLogger.hpp"
 
-#include "Utility/UtilityFunctions.hpp"
-
 #include "PinConfiguration.hpp"
 #include "SDCard.hpp"
 
@@ -23,23 +21,22 @@ void setup()
     SDCard::Begin();
 
     Sensors.Begin();
-
-#ifndef ESP8266
-    while (!Serial); // wait for serial port to connect. Needed for native USB
-#endif
+    Sensors.Calibrate();
 }
 
 void loop()
 {
-    dlogn("Sats: %d", Sensors.GNSS_Satellites());
+    Sensors.UpdateData();
 
-    UtilityFunctions::ScanI2CDevice();
-
-    dlogn("%s", Sensors.RTC_Timestamp());
-
-    dlogn("Temperature: %.2f *C", Sensors.Temperature());
-    dlogn("Pressure: %0.2f hPa", Sensors.Pressure() / 100);
-    dlogn("Approx Altitude: %0.2f m", Sensors.Altitude());
+    printf("Time: %s\n", RTC.Timestamp());
+    printf("Sats: %lu\n", Sensors.GNSS_Satellites());
+    printf("Latitude: %f\n", Sensors.GNSS_Latitude());
+    printf("Temperature: %.2f *C\n", Sensors.Temperature());
+    printf("Pressure: %0.2f hPa\n", Sensors.Pressure() / 100);
+    printf("Approx AltitudeAboveGround: %0.2f m\n", Sensors.AltitudeAboveGround());
+    dlogn("%s;%f;%f;%lu;%lu;%f;%f;%f;", RTC.Timestamp(), Sensors.GNSS_Latitude(), Sensors.GNSS_Longitude(),
+          Sensors.GNSS_Satellites(), Sensors.GNSS_HDOP(), Sensors.Pressure(), Sensors.Temperature(),
+          Sensors.AltitudeAboveGround());
 
     Sensors.SmartDelay(1000);
 
