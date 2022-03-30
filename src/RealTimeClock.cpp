@@ -17,7 +17,7 @@ void RealTimeClock::Begin()
         slog_e("Couldn't find RTC");
     }
 
-    if (!RTC.lostPower())
+    if (RTC.lostPower())
     {
         slog_w("RTC lost power, setting time to compile time.");
         RTC.adjust(DateTime(F(__DATE__), F(__TIME__)));
