@@ -13,10 +13,11 @@
  */
 double BarometricSensor::Altitude(double currentPressure, double originPressure)
 {
-    double atmospheric = pressure / 100.0F;
-    return 44330.0f * (1.0 - pow(atmospheric / seaLevel, 0.190223f));
+    double atmosphericPressure = currentPressure / 100.0f;
+    double atmosphericSeaLevel = originPressure / 100.0f;
+    return 44330.0f * (1.0 - pow(atmosphericPressure / atmosphericSeaLevel, 0.190223f));
 
-    // SparkFun: altitude = ((float)powf(sea_level_pressure / pressure, 0.190223f) - 1.0f) * (temperature + 273.15f) / 0.0065f;
+    // SparkFun: altitude = ((float)powf(sea_level_pressure / currentPressure, 0.190223f) - 1.0f) * (temperature + 273.15f) / 0.0065f;
 }
 
 /**
