@@ -11,7 +11,7 @@
  * @param seaLevel
  * @return
  */
-double BarometricSensor::Altitude(double pressure, double seaLevel)
+double BarometricSensor::Altitude(double currentPressure, double originPressure)
 {
     double atmospheric = pressure / 100.0F;
     return 44330.0f * (1.0 - pow(atmospheric / seaLevel, 0.190223f));

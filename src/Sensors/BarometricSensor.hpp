@@ -6,7 +6,7 @@
 class BarometricSensor
 {
 public:
-    static double Altitude(double pressure, double seaLevel = 1013.25f);
+    static double Altitude(double currentPressure, double originPressure = 101325.0f);
 
     static double PressureAtSeaLevel(double pressure, double altitude);
 };
