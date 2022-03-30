@@ -3,13 +3,14 @@
 #include <math.h>
 
 /**
- * @brief Calculates current altitude from pressure and pressure at sea level.
+ * @brief Calculates current altitude from currentPressure to pressure at an origin.
  *
+ * Should e used to calculate pressure relative to ground or sea level.
  * Can only be used throughout the Troposphere (up to 11km).
  *
- * @param pressure
- * @param seaLevel
- * @return
+ * @param currentPressure[Pa] Current currentPressure.
+ * @param originPressure[Pa] Pressure at sea or ground level.
+ * @return Current altitude derived from current currentPressure relative to second arguments currentPressure.
  */
 double BarometricSensor::Altitude(double currentPressure, double originPressure)
 {
