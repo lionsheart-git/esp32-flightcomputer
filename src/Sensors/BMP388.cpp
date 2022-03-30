@@ -17,13 +17,13 @@ bool BMP388::Calibrate()
 
     // Calculate average of value before and current
     double temp = GroundLevelPressure / counter_;
-    GroundLevelPressure += readPressure();
+    GroundLevelPressure += pressure;
 
     counter_++;
-    if (abs((GroundLevelPressure / counter_) - temp) < 1.0) {
+    if (abs((GroundLevelPressure / counter_) - temp) < 0.01f) {
         GroundLevelPressure /= counter_;
         return true;
     }
-    slog_d("Ground level pressure: %f, difference: %f", GroundLevelPressure / counter_, abs((GroundLevelPressure / counter_) - temp));
+    slog_d("Ground level pressure: %.2f, difference: %f", GroundLevelPressure / counter_, abs((GroundLevelPressure / counter_) - temp));
     return false;
 }
