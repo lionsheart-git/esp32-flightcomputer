@@ -1,4 +1,7 @@
-
+/**
+ * @file RealTimeClock.hpp
+ * @brief Access to DS3231 as clock.
+ */
 #ifndef ESP32_FLIGHTCOMPUTER_REALTIMECLOCK_HPP
 #define ESP32_FLIGHTCOMPUTER_REALTIMECLOCK_HPP
 

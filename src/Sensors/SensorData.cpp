@@ -1,3 +1,8 @@
+/**
+ * @file SensorData.cpp
+ * @copydoc SensorData.hpp
+ */
+
 #include "SensorData.hpp"
 
 #include <Arduino.h>
@@ -142,10 +147,10 @@ int32_t SensorData::GNSS_HDOP()
  */
 double SensorData::GNSS_Latitude()
 {
-    if (!gps_.location.isValid())
-    {
-        slog_w("Invalid gps latitude value.");
-    }
+//    if (!gps_.location.isValid())
+//    {
+//        slog_w("Invalid gps latitude value.");
+//    }
 
     return gps_.location.lat();
 }
@@ -157,10 +162,10 @@ double SensorData::GNSS_Latitude()
  */
 double SensorData::GNSS_Longitude()
 {
-    if (!gps_.location.isValid())
-    {
-        slog_w("Invalid gps longitude value.");
-    }
+//    if (!gps_.location.isValid())
+//    {
+//        slog_w("Invalid gps longitude value.");
+//    }
 
     return gps_.location.lng();
 }

@@ -1,8 +1,12 @@
+/**
+ * @file BMP388.cpp
+ * @copydoc BMP388.hpp
+ */
+
 #include "BMP388.hpp"
 
 #include <cmath>
 
-#include "Constants.hpp"
 #include "Logging/SystemLogger.hpp"
 
 BMP388::BMP388()
@@ -10,6 +14,13 @@ BMP388::BMP388()
 {
 }
 
+/**
+ * @brief Calibrates the ground level.
+ *
+ * Takes the average of two readings.
+ *
+ * @return True, if the ground level pressure is found.
+ */
 bool BMP388::Calibrate()
 {
     // Read latest data

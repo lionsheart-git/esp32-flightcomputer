@@ -1,3 +1,8 @@
+/**
+ * @file SensorData.hpp
+ * @brief Functions for accessing data from all connected sensors.
+ */
+
 #ifndef FLIGHTCOMPUTER_SENSORDATA_HPP
 #define FLIGHTCOMPUTER_SENSORDATA_HPP
 

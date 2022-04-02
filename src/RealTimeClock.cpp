@@ -1,3 +1,7 @@
+/**
+ * @file RealTimeClock.cpp
+ * @copydoc RealTimeClock.hpp
+ */
 #include "RealTimeClock.hpp"
 
 #include "Logging/SystemLogger.hpp"

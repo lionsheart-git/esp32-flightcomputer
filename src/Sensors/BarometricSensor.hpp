@@ -1,3 +1,7 @@
+/**
+ * @file BarometricSensor.hpp
+ * @brief General functions for barometric sensors.
+ */
 
 #ifndef ESP32_FLIGHTCOMPUTER_BAROMETRICSENSOR_HPP
 #define ESP32_FLIGHTCOMPUTER_BAROMETRICSENSOR_HPP

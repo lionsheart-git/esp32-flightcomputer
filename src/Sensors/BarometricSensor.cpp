@@ -1,3 +1,8 @@
+/**
+ * @file BarometricSensor.cpp
+ * @copydoc BarometricSensor.hpp
+ */
+
 #include "BarometricSensor.hpp"
 
 #include <math.h>
