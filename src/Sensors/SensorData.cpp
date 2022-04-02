@@ -16,6 +16,8 @@ SensorData::SensorData()
  */
 void SensorData::Begin()
 {
+    slog_i("Starting all sensors.");
+
     Wire1.setPins(I2C_SDA2, I2C_SCL2);
 
     if (!bmp_.begin_I2C(0x77, &Wire1))
@@ -32,11 +34,16 @@ void SensorData::Begin()
     // Initialize GPS serial
     gpsSerial_.begin(9600, SERIAL_8N1, GPS_RX, GPS_TX);
 
+    // Give all sensors time to come online.
     SmartDelay(5000);
+
+    // Check if UART connection to GNSS is working
     if (gps_.charsProcessed() < 10)
     {
         slog_e("No GPS data received: check wiring");
     }
+
+    slog_i("All sensors connected.");
 }
 
 /**
@@ -181,7 +188,6 @@ float SensorData::Temperature()
  */
 double SensorData::AltitudeAboveGround()
 {
-    printf("Altitude above ground calculation with pressure: %f and GLP: %f.\n", bmp_.pressure, bmp_.GroundLevelPressure);
     return BarometricSensor::Altitude(bmp_.pressure, bmp_.GroundLevelPressure);
 }
 
