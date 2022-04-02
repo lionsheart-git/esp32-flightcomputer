@@ -49,7 +49,7 @@ void SensorData::Begin()
 /**
  * @brief Delay that keeps feeding TinyGPS the GNSS data.
  *
- * Should always be used if a GNSS module ist connected.
+ * Should always be used if a GNSS module is connected.
  *
  * @param ms Milliseconds the delay should be.
  */
@@ -127,9 +127,12 @@ uint32_t SensorData::GNSS_Satellites()
  */
 int32_t SensorData::GNSS_HDOP()
 {
-    int32_t hdop = 0;
+    if (!gps_.hdop.isValid())
+    {
+        slog_w("Invalid gps hdop value.");
+    }
 
-    return hdop;
+    return gps_.hdop.value();
 }
 
 /**
@@ -139,9 +142,12 @@ int32_t SensorData::GNSS_HDOP()
  */
 double SensorData::GNSS_Latitude()
 {
-    double latitude = 0;
+    if (!gps_.location.isValid())
+    {
+        slog_w("Invalid gps latitude value.");
+    }
 
-    return latitude;
+    return gps_.location.lat();
 }
 
 /**
@@ -151,9 +157,12 @@ double SensorData::GNSS_Latitude()
  */
 double SensorData::GNSS_Longitude()
 {
-    double longitude = 0;
+    if (!gps_.location.isValid())
+    {
+        slog_w("Invalid gps longitude value.");
+    }
 
-    return longitude;
+    return gps_.location.lng();
 }
 
 /**
