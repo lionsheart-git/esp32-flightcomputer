@@ -30,7 +30,6 @@ void loop()
 
     printf("Time: %s\n", RTC.Timestamp());
     printf("Sats: %lu\n", Sensors.GNSS_Satellites());
-    printf("Latitude: %f\n", Sensors.GNSS_Latitude());
     printf("Temperature: %.2f *C\n", Sensors.Temperature());
     printf("Pressure: %0.2f hPa\n", Sensors.Pressure() / 100);
     printf("Approx AltitudeAboveGround: %0.2f m\n", Sensors.AltitudeAboveGround());
