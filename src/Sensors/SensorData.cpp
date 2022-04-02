@@ -60,8 +60,10 @@ void SensorData::SmartDelay(unsigned long ms)
     {
         while (gpsSerial_.available())
         {
-            SensorData::gps_.encode(gpsSerial_.read());
+            this->gps_.encode(gpsSerial_.read());
         }
+
+        this->UpdateData();
     } while (millis() - start < ms);
 }
 
