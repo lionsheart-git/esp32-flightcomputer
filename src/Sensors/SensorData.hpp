@@ -11,9 +11,11 @@
 
 #include <RTClib.h>
 #include <TinyGPS++.h>
-#include "BMP388.hpp"
 #include <HardwareSerial.h>
 #include <Wire.h>
+
+#include "BMP388.hpp"
+#include "MPU6050.hpp"
 
 #include "PinConfiguration.hpp"
 
@@ -37,12 +39,15 @@ public:
     double AltitudeAboveGround();
     double AltitudeAboveSeaLevel();
     float Temperature();
+    sensors_vec_t Acceleration() const;
+    sensors_vec_t Gyro() const;
 
 private:
     BMP388 bmp_;
     TinyGPSPlus gps_;
     HardwareSerial gpsSerial_;
     // TwoWire i2c_;
+    MPU6050 mpu6050_;
 };
 
 extern SensorData Sensors;

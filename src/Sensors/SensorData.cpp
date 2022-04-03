@@ -36,6 +36,15 @@ void SensorData::Begin()
     bmp_.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
     bmp_.setOutputDataRate(BMP3_ODR_100_HZ);
 
+    // Start MPU6050. No check if successful since this always fails.
+    //@todo Figure out why always returned false.
+    mpu6050_.begin(MPU6050_I2CADDR_DEFAULT, &Wire1);
+
+    // Set ranges and filter
+    mpu6050_.setAccelerometerRange(MPU6050_RANGE_8_G);
+    mpu6050_.setGyroRange(MPU6050_RANGE_500_DEG);
+    mpu6050_.setFilterBandwidth(MPU6050_BAND_21_HZ);
+
     // Initialize GPS serial
     gpsSerial_.begin(9600, SERIAL_8N1, GPS_RX, GPS_TX);
 
@@ -84,7 +93,8 @@ bool SensorData::Calibrate()
     bool success = false;
     while (!success)
     {
-        if (bmp_.Calibrate())
+        if (bmp_.Calibrate()
+        && mpu6050_.Calibrate())
         {
             success = true;
         }
@@ -103,6 +113,7 @@ bool SensorData::Calibrate()
 void SensorData::UpdateData()
 {
     bmp_.performReading();
+    mpu6050_.Update();
 }
 
 //@todo Figure out whether to use exceptions or return codes to signal invalid readings
@@ -218,6 +229,16 @@ double SensorData::AltitudeAboveGround()
 double SensorData::AltitudeAboveSeaLevel()
 {
     return BarometricSensor::Altitude(bmp_.pressure);
+}
+
+sensors_vec_t SensorData::Acceleration() const
+{
+    return this->mpu6050_.acceleration_;
+}
+
+sensors_vec_t SensorData::Gyro() const
+{
+    return this->mpu6050_.gyro_;
 }
 
 
