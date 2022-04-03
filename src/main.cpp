@@ -33,9 +33,14 @@ void loop()
     printf("Temperature: %.2f *C\n", Sensors.Temperature());
     printf("Pressure: %0.2f hPa\n", Sensors.Pressure() / 100);
     printf("Approx AltitudeAboveGround: %0.2f m\n", Sensors.AltitudeAboveGround());
-    dlogn("%s;%f;%f;%lu;%lu;%f;%f;%f;", RTC.Timestamp(), Sensors.GNSS_Latitude(), Sensors.GNSS_Longitude(),
+    printf("Acceleration X: %f, Y: %f, Z: %f m/s^2\n", Sensors.Acceleration().x, Sensors.Acceleration().y,
+           Sensors.Acceleration().z);
+    printf("Rotation X: %f, Y: %f, Z: %f\n", Sensors.Gyro().x, Sensors.Gyro().y, Sensors.Gyro().z);
+    dlogn("%s;%f;%f;%lu;%lu;%f;%f;%f;%f;%f;%f;%f;%f;%f;", RTC.Timestamp(), Sensors.GNSS_Latitude(),
+          Sensors.GNSS_Longitude(),
           Sensors.GNSS_Satellites(), Sensors.GNSS_HDOP(), Sensors.Pressure(), Sensors.Temperature(),
-          Sensors.AltitudeAboveGround());
+          Sensors.AltitudeAboveGround(), Sensors.Acceleration().x, Sensors.Acceleration().y, Sensors.Acceleration().z,
+          Sensors.Gyro().x, Sensors.Gyro().y, Sensors.Gyro().z);
 
     Sensors.SmartDelay(1000);
 
