@@ -22,8 +22,8 @@
 #define GPS_RX 32 /**< @brief GPS rx pin */
 #define GPS_TX 33 /**<@brief GPS tx pin */
 
-#define I2C_SDA1 21
-#define I2C_SCL1 22
+#define I2C_SDA1 22
+#define I2C_SCL1 21
 
 #define I2C_SDA2 25
 #define I2C_SCL2 26
