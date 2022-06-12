@@ -44,7 +44,7 @@ void setup()
 
         fc.CheckFlight();
         printf("Max Altitude: %.2f m\n", fc.MaxAltitude());
-        printf("State: %d\n", fc.State());
+        printf("Phase: %d\n", fc.Phase());
 
         dlogn("%s;%f;%f;%lu;%lu;%f;%f;%f;%f;%f;%f;%f;%f;%f;", RTC.Timestamp(), Sensors.GNSS_Latitude(),
               Sensors.GNSS_Longitude(),

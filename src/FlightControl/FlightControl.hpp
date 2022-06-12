@@ -4,7 +4,7 @@
 
 #include <Sensors/SensorData.hpp>
 
-enum FlightState {
+enum FlightPhase {
     Idle,
     LaunchDetection,
     PoweredFlight,
@@ -18,7 +18,7 @@ class FlightControl
 {
 public:
     explicit FlightControl(SensorData &sensors);
-    FlightState State();
+    FlightPhase Phase();
     void CheckFlight();
     double MaxAltitude();
 
@@ -27,7 +27,7 @@ private:
     bool isApogee();
 
     SensorData& sensors_;
-    FlightState state_;
+    FlightPhase phase_;
 
     double maxAltitude_;
     uint8_t counter_;

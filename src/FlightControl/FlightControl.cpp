@@ -6,21 +6,22 @@
 #define ALTITUDE_THRESHOLD 2
 
 FlightControl::FlightControl(SensorData &sensors)
-: sensors_(sensors), state_(FlightState::Idle), maxAltitude_(0.0), counter_(0)
+: sensors_(sensors), phase_(FlightPhase::Idle), maxAltitude_(0.0), counter_(0)
 {
     slog_i("Started flight control.");
 }
 
-FlightState FlightControl::State()
+FlightPhase FlightControl::Phase()
 {
-    return state_;
+    return phase_;
 }
 
 void FlightControl::CheckFlight()
 {
-    if (state_ < FlightState::Descend && isApogee()) {
+
+    if (phase_ < FlightPhase::Descend && isApogee()) {
         slog_i("Eject Recovery");
-        state_ = FlightState::Descend;
+        phase_ = FlightPhase::Descend;
     }
 }
 
