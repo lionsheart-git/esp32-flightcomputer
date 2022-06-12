@@ -17,16 +17,6 @@ FlightControl::FlightControl(SensorData &sensors)
 }
 
 /**
- * @brief Current phase of flight rocket is in.
- *
- * @return The phase of flight.
- */
-FlightPhase FlightControl::Phase()
-{
-    return phase_;
-}
-
-/**
  * @brief Checks the current flight for events.
  *
  * Detects flight phase and apogee.
@@ -63,6 +53,16 @@ bool FlightControl::isApogee()
         counter_++;
     }
     return false;
+}
+
+/**
+ * @brief Current phase of flight rocket is in.
+ *
+ * @return The phase of flight.
+ */
+FlightPhase FlightControl::Phase()
+{
+    return phase_;
 }
 
 /**

@@ -25,8 +25,9 @@ class FlightControl
 {
 public:
     explicit FlightControl(SensorData &sensors);
-    FlightPhase Phase();
     void CheckFlight();
+
+    FlightPhase Phase();
     double MaxAltitude();
 
 
