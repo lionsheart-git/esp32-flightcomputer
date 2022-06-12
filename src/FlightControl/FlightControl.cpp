@@ -39,3 +39,8 @@ bool FlightControl::isApogee()
     }
     return false;
 }
+
+double FlightControl::MaxAltitude()
+{
+    return maxAltitude_;
+}

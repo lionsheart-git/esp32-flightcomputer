@@ -19,7 +19,8 @@ class FlightControl
 public:
     explicit FlightControl(SensorData &sensors);
     FlightState State();
-    void checkFlight();
+    void CheckFlight();
+    double MaxAltitude();
 
 
 private:
