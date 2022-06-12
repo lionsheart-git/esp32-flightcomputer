@@ -4,16 +4,23 @@
 
 #include <Sensors/SensorData.hpp>
 
+/**
+ * @enum FlightPhase
+ * @brief Current phase of the flight.
+ */
 enum FlightPhase {
-    Idle,
-    LaunchDetection,
-    PoweredFlight,
-    UnpoweredFlight,
-    Descend,
-    TouchedDown
+    Idle, /**< Rocket is waiting to be put in launch detect state */
+    LaunchDetection, /**< Launch detect phase */
+    PoweredFlight, /**< Motor is burning and accelerating the rocket */
+    UnpoweredFlight, /**< Rocket is still ascending but no longer accelerating. Motor burned out */
+    Descend, /**< Rocket is descending */
+    TouchedDown /**< Rocket landed on the ground */
 };
 
-
+/**
+ * @class FlightControl
+ * @brief Used to control different phases and events of the flight.
+ */
 class FlightControl
 {
 public:

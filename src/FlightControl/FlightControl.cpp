@@ -5,17 +5,32 @@
 
 #define ALTITUDE_THRESHOLD 2
 
+/**
+ * @brief New FlightControl with sensors to retrieve data from.
+ *
+ * @param sensors Sensors to retrieve data from.
+ */
 FlightControl::FlightControl(SensorData &sensors)
 : sensors_(sensors), phase_(FlightPhase::Idle), maxAltitude_(0.0), counter_(0)
 {
     slog_i("Started flight control.");
 }
 
+/**
+ * @brief Current phase of flight rocket is in.
+ *
+ * @return The phase of flight.
+ */
 FlightPhase FlightControl::Phase()
 {
     return phase_;
 }
 
+/**
+ * @brief Checks the current flight for events.
+ *
+ * Detects flight phase and apogee.
+ */
 void FlightControl::CheckFlight()
 {
 
@@ -25,6 +40,15 @@ void FlightControl::CheckFlight()
     }
 }
 
+/**
+ * @brief Detects the apogee of the rocket.
+ *
+ * Uses the barometric pressure to find the maximum altitude and activate the recovery system on descend.
+ *
+ * @return If the apogee is detected.
+ * @retval True, if the rocket reached apogee.
+ * @retval False, if the rocket has not reached the apogee yet.
+ */
 bool FlightControl::isApogee()
 {
     double currentAltitude = sensors_.AltitudeAboveGround();
@@ -41,6 +65,11 @@ bool FlightControl::isApogee()
     return false;
 }
 
+/**
+ * @brief Max altitude the rocket has reached.
+ *
+ * @return Max altitude.
+ */
 double FlightControl::MaxAltitude()
 {
     return maxAltitude_;
