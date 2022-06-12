@@ -16,9 +16,9 @@ FlightState FlightControl::State()
     return state_;
 }
 
-void FlightControl::checkFlight()
+void FlightControl::CheckFlight()
 {
-    if (isApogee()) {
+    if (state_ < FlightState::Descend && isApogee()) {
         slog_i("Eject Recovery");
         state_ = FlightState::Descend;
     }
@@ -28,7 +28,7 @@ bool FlightControl::isApogee()
 {
     double currentAltitude = sensors_.AltitudeAboveGround();
 
-    if (maxAltitude_ < currentAltitude + ALTITUDE_THRESHOLD) {
+    if (maxAltitude_ + ALTITUDE_THRESHOLD < currentAltitude) {
         maxAltitude_ = currentAltitude;
         counter_ = 0;
     } else if (currentAltitude + ALTITUDE_THRESHOLD < maxAltitude_ && counter_ > 100) {
