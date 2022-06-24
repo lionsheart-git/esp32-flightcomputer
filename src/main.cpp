@@ -16,19 +16,24 @@
 void setup()
 {
     Serial.begin(115200);
+
     // Init SD Card on correct SPI port.
     Wire.setPins(I2C_SDA1, I2C_SCL1);
 
     // Start RealTimeClock
     RTC.Begin();
 
+    // Starting SD Card
     SDCard::Begin();
 
+    // Starting and calibrating Sensors
     Sensors.Begin();
     Sensors.Calibrate();
 
+    // Starting flight control
     FlightControl fc = FlightControl(Sensors);
 
+    // Main loop
     while (true) {
         //    UtilityFunctions::ScanI2CDevice(&Wire1);
         Sensors.UpdateData();
@@ -56,6 +61,7 @@ void setup()
     }
 }
 
+// Not used
 void loop()
 {
 }
