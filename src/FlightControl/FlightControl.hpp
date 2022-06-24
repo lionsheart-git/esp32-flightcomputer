@@ -3,6 +3,7 @@
 #define ESP32_FLIGHTCOMPUTER_FLIGHTCONTROLL_HPP
 
 #include <Sensors/SensorData.hpp>
+#include "ServoControl.hpp"
 
 /**
  * @enum FlightPhase
@@ -39,6 +40,8 @@ private:
 
     double maxAltitude_;
     uint8_t counter_;
+
+    ServoControl recoveryServo_;
 };
 
 

@@ -11,7 +11,7 @@
  * @param sensors Sensors to retrieve data from.
  */
 FlightControl::FlightControl(SensorData &sensors)
-: sensors_(sensors), phase_(FlightPhase::Idle), maxAltitude_(0.0), counter_(0)
+: sensors_(sensors), phase_(FlightPhase::Idle), maxAltitude_(0.0), counter_(0), recoveryServo_(SERVO_PWM, 10, 150)
 {
     slog_i("Started flight control.");
 }
@@ -26,6 +26,8 @@ void FlightControl::CheckFlight()
 
     if (phase_ < FlightPhase::Descend && isApogee()) {
         slog_i("Eject Recovery");
+        recoveryServo_.open();
+
         phase_ = FlightPhase::Descend;
     }
 }
