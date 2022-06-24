@@ -34,6 +34,8 @@ bool LoRaCommunication::transmit(const char * str)
         Serial.print(radio.getDataRate());
         Serial.println(F(" bps"));
 
+        return true;
+
     } else if (state == RADIOLIB_ERR_PACKET_TOO_LONG) {
         // the supplied packet was longer than 256 bytes
         Serial.println(F("too long!"));
@@ -48,6 +50,8 @@ bool LoRaCommunication::transmit(const char * str)
         Serial.println(state);
 
     }
+
+    return false;
 }
 
 //void setup() {
