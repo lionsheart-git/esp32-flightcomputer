@@ -9,7 +9,7 @@
 
 #include "Logging/SystemLogger.hpp"
 
-#define SLIDING_AVERAGE_ELEMENTS 10
+#define SLIDING_AVERAGE_ELEMENTS 100
 
 BMP388::BMP388()
         : Adafruit_BMP3XX(), GroundLevelPressure(0.0), counter_(0)
@@ -29,7 +29,7 @@ bool BMP388::Calibrate()
     this->performReading();
 
 
-    double scalar1 = 1.0 / 100;
+    double scalar1 = 1.0 / SLIDING_AVERAGE_ELEMENTS;
     double scalar2 = 1.0 - scalar1;
 
     if (counter_ == 0)
@@ -40,30 +40,7 @@ bool BMP388::Calibrate()
     }
 
     // Calculates the average until two values are close enough together.
-    //@todo Change to a better average calculation
-    /* Example: Sliding average of 10 elements
-
-    bool first_sample = true;
-    double average=0.0;
-    while(someCondition)
-    {
-       double newSample = getSample();
-       if(first_sample)
-       {
-        // everybody forgets the initial condition *sigh*
-          average = newSample;
-          first_sample = false;
-       }
-       else
-       {
-          average = (sample*scalar1) + (average*scalar2);
-       }
-     }
-
-     */
-    GroundLevelPressure = (GroundLevelPressure + this->pressure) / 2;
-
-//    GroundLevelPressure = GroundLevelPressure * scalar2 + this->pressure * scalar1;
+    GroundLevelPressure = GroundLevelPressure * scalar2 + this->pressure * scalar1;
 
 
     // Check before and after difference
