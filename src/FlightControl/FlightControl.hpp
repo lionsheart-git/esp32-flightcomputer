@@ -28,8 +28,8 @@ public:
     explicit FlightControl(SensorData &sensors);
     void CheckFlight();
 
-    FlightPhase Phase();
-    double MaxAltitude();
+    FlightPhase Phase() const;
+    double MaxAltitude() const;
 
 
 private:

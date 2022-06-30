@@ -62,7 +62,7 @@ bool FlightControl::isApogee()
  *
  * @return The phase of flight.
  */
-FlightPhase FlightControl::Phase()
+FlightPhase FlightControl::Phase() const
 {
     return phase_;
 }
@@ -72,7 +72,7 @@ FlightPhase FlightControl::Phase()
  *
  * @return Max altitude.
  */
-double FlightControl::MaxAltitude()
+double FlightControl::MaxAltitude() const
 {
     return maxAltitude_;
 }
