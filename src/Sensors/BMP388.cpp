@@ -8,12 +8,14 @@
 #include <cmath>
 
 #include "Logging/SystemLogger.hpp"
+#include "Utility/CalibrationSequences.hpp"
 
 #define SLIDING_AVERAGE_ELEMENTS 100
 
 BMP388::BMP388()
-        : Adafruit_BMP3XX(), GroundLevelPressure(0.0), counter_(0)
+        : Adafruit_BMP3XX()
 {
+    this->GroundLevelPressure_.elements_count = 100;
 }
 
 /**
@@ -28,28 +30,23 @@ bool BMP388::Calibrate()
     // Read latest data
     this->performReading();
 
-
-    double scalar1 = 1.0 / SLIDING_AVERAGE_ELEMENTS;
-    double scalar2 = 1.0 - scalar1;
-
-    if (counter_ == 0)
+    // Initial pressure so difference check does not succeed.
+    if (GroundLevelPressure_.first_element)
     {
-        GroundLevelPressure = this->pressure;
-        counter_++;
+        CalibrationSequences::SlidingAverage(GroundLevelPressure_, this->pressure);
         return false;
     }
 
-    // Calculates the average until two values are close enough together.
-    GroundLevelPressure = GroundLevelPressure * scalar2 + this->pressure * scalar1;
-
+    // Sliding average over all pressure values.
+    CalibrationSequences::SlidingAverage(GroundLevelPressure_, this->pressure);
 
     // Check before and after difference
-    if (abs(this->pressure - GroundLevelPressure) < 0.01f)
+    if (abs(this->pressure - GroundLevelPressure_.data) < 0.01f)
     {
         return true;
     }
 
-    slog_d("Pressure: %.2f, Ground level pressure: %.2f, difference: %f", this->pressure, GroundLevelPressure,
-           abs(this->pressure - GroundLevelPressure));
+    slog_d("Pressure: %.2f, Ground level pressure: %.2f, difference: %f", this->pressure, GroundLevelPressure_.data,
+           abs(this->pressure - GroundLevelPressure_.data));
     return false;
 }

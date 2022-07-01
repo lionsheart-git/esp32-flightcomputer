@@ -6,6 +6,7 @@
 #define ESP32_FLIGHTCOMPUTER_BMP388_HPP
 
 #include "Adafruit_BMP3XX.h"
+#include "Utility/CalibrationSequences.hpp"
 
 class BMP388 : public Adafruit_BMP3XX
 {
@@ -17,7 +18,7 @@ public:
     double GroundLevelPressure;
 
 private:
-    uint16_t counter_;
+    sliding_average_t GroundLevelPressure_;
 };
 
 
