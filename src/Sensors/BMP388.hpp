@@ -13,9 +13,7 @@ class BMP388 : public Adafruit_BMP3XX
 public:
     BMP388();
     bool Calibrate();
-
-public:
-    double GroundLevelPressure;
+    double GroundLevelPressure() const;
 
 private:
     sliding_average_t GroundLevelPressure_;

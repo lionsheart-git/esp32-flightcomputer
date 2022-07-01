@@ -101,7 +101,7 @@ bool SensorData::Calibrate()
         SmartDelay(100);
     }
 
-    slog_i("Ground level pressure: %f Pa", bmp_.GroundLevelPressure);
+    slog_i("Ground level pressure: %f Pa", bmp_.GroundLevelPressure());
 
     slog_i("Sensor calibration took: %ld", millis() - start);
     return true;
@@ -215,7 +215,7 @@ float SensorData::Temperature()
  */
 double SensorData::AltitudeAboveGround()
 {
-    return BarometricSensor::Altitude(bmp_.pressure, bmp_.GroundLevelPressure);
+    return BarometricSensor::Altitude(bmp_.pressure, bmp_.GroundLevelPressure());
 }
 
 /**

@@ -50,3 +50,8 @@ bool BMP388::Calibrate()
            abs(this->pressure - GroundLevelPressure_.data));
     return false;
 }
+
+double BMP388::GroundLevelPressure() const
+{
+    return GroundLevelPressure_.data;
+}
