@@ -33,6 +33,7 @@ public:
     int32_t GNSS_HDOP();
     double GNSS_Latitude();
     double GNSS_Longitude();
+    double GNSS_Altitude();
 
     // Environment
     double Pressure();

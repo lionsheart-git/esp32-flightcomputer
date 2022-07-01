@@ -94,7 +94,7 @@ bool SensorData::Calibrate()
     while (!success)
     {
         if (bmp_.Calibrate()
-        && mpu6050_.Calibrate())
+            && mpu6050_.Calibrate())
         {
             success = true;
         }
@@ -179,6 +179,16 @@ double SensorData::GNSS_Longitude()
 //    }
 
     return gps_.location.lng();
+}
+
+/**
+ * @brief Altitude by GNSS.
+ *
+ * @return The current altitude measured by the GNSS.
+ */
+double SensorData::GNSS_Altitude()
+{
+    return gps_.altitude.meters();
 }
 
 /**
