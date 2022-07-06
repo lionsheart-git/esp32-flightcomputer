@@ -16,6 +16,7 @@
 
 #include "BMP388.hpp"
 #include "MPU6050.hpp"
+#include "GNSSSensor.hpp"
 
 #include "PinConfiguration.hpp"
 
@@ -45,8 +46,9 @@ public:
 
 private:
     BMP388 bmp_;
-    TinyGPSPlus gps_;
-    HardwareSerial gpsSerial_;
+//    TinyGPSPlus gps_;
+    GNSSSensor gps_;
+    //HardwareSerial gpsSerial_;
     // TwoWire i2c_;
     MPU6050 mpu6050_;
 };

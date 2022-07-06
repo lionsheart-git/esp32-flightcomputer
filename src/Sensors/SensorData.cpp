@@ -12,7 +12,7 @@
 #include "BarometricSensor.hpp"
 
 SensorData::SensorData()
-        : gpsSerial_(2)
+        : gps_() //gpsSerial_(2)
 {
 }
 
@@ -46,7 +46,7 @@ void SensorData::Begin()
     mpu6050_.setFilterBandwidth(MPU6050_BAND_21_HZ);
 
     // Initialize GPS serial
-    gpsSerial_.begin(9600, SERIAL_8N1, GPS_RX, GPS_TX);
+    // gpsSerial_.begin(9600, SERIAL_8N1, GPS_RX, GPS_TX);
 
     // Give all sensors time to come online.
     SmartDelay(5000);
@@ -72,10 +72,11 @@ void SensorData::SmartDelay(unsigned long ms)
     unsigned long start = millis();
     do
     {
-        while (gpsSerial_.available())
-        {
-            this->gps_.encode(gpsSerial_.read());
-        }
+//        while (gpsSerial_.available())
+//        {
+//            this->gps_.encode(gpsSerial_.read());
+//        }
+        gps_.OnDelay();
 
         this->UpdateData();
     } while (millis() - start < ms);
