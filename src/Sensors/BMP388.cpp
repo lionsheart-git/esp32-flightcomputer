@@ -41,7 +41,7 @@ bool BMP388::Calibrate()
     CalibrationSequences::SlidingAverage(GroundLevelPressure_, this->pressure);
 
     // Check before and after difference
-    if (abs(this->pressure - GroundLevelPressure_.data) < 0.01f)
+    if (abs(this->pressure - GroundLevelPressure_.data) < 1.0f)
     {
         return true;
     }
