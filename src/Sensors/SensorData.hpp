@@ -18,6 +18,8 @@
 #include "MPU6050.hpp"
 #include "GNSSSensor.hpp"
 
+#include "Utility//KalmanFilter.hpp"
+
 #include "PinConfiguration.hpp"
 
 class SensorData
@@ -35,10 +37,13 @@ public:
     double GNSS_Latitude();
     double GNSS_Longitude();
     double GNSS_Altitude();
+    float FilteredGNSSAltitude();
 
     // Environment
     double Pressure();
+    double FilteredPressure();
     double AltitudeAboveGround();
+    double FilteredAltitudeAboveGround();
     double AltitudeAboveSeaLevel();
     float Temperature();
     sensors_vec_t Acceleration() const;
@@ -46,8 +51,10 @@ public:
 
 private:
     BMP388 bmp_;
+    KalmanFilter pressureKalman_;
 //    TinyGPSPlus gps_;
     GNSSSensor gps_;
+    KalmanFilter gpsKalman_;
     //HardwareSerial gpsSerial_;
     // TwoWire i2c_;
     MPU6050 mpu6050_;

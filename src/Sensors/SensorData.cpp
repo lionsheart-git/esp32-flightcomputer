@@ -12,7 +12,7 @@
 #include "BarometricSensor.hpp"
 
 SensorData::SensorData()
-        : gps_() //gpsSerial_(2)
+        : gps_(), pressureKalman_(1.12184278324081e-4, 1e-8), gpsKalman_(10.0, 1e-8) //gpsSerial_(2)
 {
 }
 
@@ -115,6 +115,7 @@ void SensorData::UpdateData()
 {
     bmp_.performReading();
     mpu6050_.Update();
+    pressureKalman_.Update(bmp_.pressure);;
 }
 
 //@todo Figure out whether to use exceptions or return codes to signal invalid readings
@@ -204,6 +205,11 @@ double SensorData::Pressure()
     return bmp_.pressure;
 }
 
+double SensorData::FilteredPressure()
+{
+    return pressureKalman_.Value();
+}
+
 /**
  * @brief Get the temperature of the barometric sensor.
  *
@@ -228,6 +234,12 @@ double SensorData::AltitudeAboveGround()
 {
     return BarometricSensor::Altitude(bmp_.pressure, bmp_.GroundLevelPressure());
 }
+
+double SensorData::FilteredAltitudeAboveGround()
+{
+    return BarometricSensor::Altitude(FilteredPressure(), bmp_.GroundLevelPressure());
+}
+
 
 /**
  * @brief Calculates the altitude above sea level in meters.
