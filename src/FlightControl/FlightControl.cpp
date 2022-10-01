@@ -29,6 +29,10 @@ void FlightControl::CheckFlight()
         phase_ = FlightPhase::PoweredFlight;
     }
 
+//    if (phase_ == FlightPhase::PoweredFlight && UnpoweredFlight()) {
+//        phase_ = FlightPhase::UnpoweredFlight;
+//    }
+
     if (phase_ < FlightPhase::Descend && isApogee()) {
         slog_i("Eject Recovery");
         recoveryServo_.open();
@@ -130,6 +134,7 @@ bool FlightControl::TouchedDown()
     if (lastAltitude == 0) {
         lastAltitude = currentAltitude;
     } else if (altitudeDifference < ALTITUDE_THRESHOLD && counter_ > 10) {
+        counter_ = 0;
         return true;
     } else if (altitudeDifference < ALTITUDE_THRESHOLD) {
         counter_++;
@@ -137,7 +142,27 @@ bool FlightControl::TouchedDown()
     return false;
 }
 
+/**
+ * @brief Checks if the motor burned out.
+ * @todo Find correct calculation.
+ *
+ * @return True, if the motor burned out.
+ */
 bool FlightControl::UnpoweredFlight()
 {
+    sensors_vec_t accelAxis = sensors_.Acceleration();
+
+    double acceleration = LengthVector(accelAxis);
+
+    double accelerationDifference = std::abs(lastAccelerationDifference_ - acceleration);
+
+    if (lastAccelerationDifference_ == 0) {
+        lastAccelerationDifference_ = accelerationDifference;
+    } else if (accelerationDifference < accelerationDifference && counter_ > 10) {
+        counter_ = 0;
+        return true;
+    } else if (accelerationDifference < accelerationDifference) {
+        counter_++;
+    }
     return false;
 }

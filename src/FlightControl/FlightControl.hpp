@@ -41,7 +41,7 @@ private:
     SensorData& sensors_;
     FlightPhase phase_;
 
-    double lastAcceleration_;
+    double lastAccelerationDifference_;
     double lastAltitude;
     double maxAltitude_;
     uint8_t counter_;
