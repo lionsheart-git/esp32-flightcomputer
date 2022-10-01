@@ -13,7 +13,8 @@
  * @param sensors Sensors to retrieve data from.
  */
 FlightControl::FlightControl(SensorData &sensors)
-: sensors_(sensors), phase_(FlightPhase::Idle), maxAltitude_(0.0), counter_(0), recoveryServo_(SERVO_PWM, 10, 150)
+        : sensors_(sensors), phase_(FlightPhase::Idle), maxAltitude_(0.0), counter_(0),
+          recoveryServo_(SERVO_PWM, 10, 150)
 {
     slog_i("Started flight control.");
 }
@@ -25,7 +26,8 @@ FlightControl::FlightControl(SensorData &sensors)
  */
 void FlightControl::CheckFlight()
 {
-    if (phase_ < FlightPhase::PoweredFlight && LaunchDetected()) {
+    if (phase_ < FlightPhase::PoweredFlight && LaunchDetected())
+    {
         phase_ = FlightPhase::PoweredFlight;
     }
 
@@ -33,14 +35,16 @@ void FlightControl::CheckFlight()
 //        phase_ = FlightPhase::UnpoweredFlight;
 //    }
 
-    if (phase_ < FlightPhase::Descend && isApogee()) {
+    if (phase_ < FlightPhase::Descend && isApogee())
+    {
         slog_i("Eject Recovery");
         recoveryServo_.open();
 
         phase_ = FlightPhase::Descend;
     }
 
-    if (phase_ >= FlightPhase::Descend && TouchedDown()) {
+    if (phase_ >= FlightPhase::Descend && TouchedDown())
+    {
         phase_ = FlightPhase::TouchedDown;
     }
 }
@@ -58,14 +62,17 @@ bool FlightControl::isApogee()
 {
     double currentAltitude = sensors_.FilteredAltitudeAboveGround();
 
-    if (maxAltitude_ + ALTITUDE_THRESHOLD < currentAltitude) {
+    if (maxAltitude_ + ALTITUDE_THRESHOLD < currentAltitude)
+    {
         maxAltitude_ = currentAltitude;
         counter_ = 0;
-    } else if (currentAltitude + ALTITUDE_THRESHOLD < maxAltitude_ && counter_ > 10) {
+    } else if (currentAltitude + ALTITUDE_THRESHOLD < maxAltitude_ && counter_ > 10)
+    {
         slog_i("Apogee detected!");
         counter_ = 0;
         return true;
-    } else if (currentAltitude + ALTITUDE_THRESHOLD < maxAltitude_) {
+    } else if (currentAltitude + ALTITUDE_THRESHOLD < maxAltitude_)
+    {
         counter_++;
     }
     return false;
@@ -100,7 +107,8 @@ bool FlightControl::LaunchDetected()
 {
     double currentAltitude = sensors_.FilteredAltitudeAboveGround();
 
-    if (currentAltitude > LAUNCH_DETECT_ALTITUDE) {
+    if (currentAltitude > LAUNCH_DETECT_ALTITUDE)
+    {
         return true;
     }
 
@@ -108,7 +116,8 @@ bool FlightControl::LaunchDetected()
 
     double acceleration = LengthVector(accelAxis);
 
-    if (acceleration > LAUNCH_DETECT_ACCELERATION) {
+    if (acceleration > LAUNCH_DETECT_ACCELERATION)
+    {
         return true;
     }
 
@@ -131,12 +140,17 @@ bool FlightControl::TouchedDown()
 
     double altitudeDifference = std::abs(lastAltitude - currentAltitude);
 
-    if (lastAltitude == 0) {
+    if (lastAltitude == 0)
+    {
         lastAltitude = currentAltitude;
-    } else if (altitudeDifference < ALTITUDE_THRESHOLD && counter_ > 10) {
+    } else if (altitudeDifference < ALTITUDE_THRESHOLD && counter_ > 10)
+    {
+        lastAltitude = currentAltitude;
         counter_ = 0;
         return true;
-    } else if (altitudeDifference < ALTITUDE_THRESHOLD) {
+    } else if (altitudeDifference < ALTITUDE_THRESHOLD)
+    {
+        lastAltitude = currentAltitude;
         counter_++;
     }
     return false;
@@ -154,14 +168,22 @@ bool FlightControl::UnpoweredFlight()
 
     double acceleration = LengthVector(accelAxis);
 
-    double accelerationDifference = std::abs(lastAccelerationDifference_ - acceleration);
+    double accelerationDifference = acceleration - lastAcceleration_;
 
-    if (lastAccelerationDifference_ == 0) {
+    if (lastAcceleration_ == 0 && lastAccelerationDifference_ == 0)
+    {
+        lastAcceleration_ = acceleration;
         lastAccelerationDifference_ = accelerationDifference;
-    } else if (accelerationDifference < accelerationDifference && counter_ > 10) {
+    } else if (accelerationDifference < accelerationDifference && counter_ > 10)
+    {
+        lastAcceleration_ = acceleration;
+        lastAccelerationDifference_ = accelerationDifference;
         counter_ = 0;
         return true;
-    } else if (accelerationDifference < accelerationDifference) {
+    } else if (accelerationDifference < accelerationDifference)
+    {
+        lastAcceleration_ = acceleration;
+        lastAccelerationDifference_ = accelerationDifference;
         counter_++;
     }
     return false;

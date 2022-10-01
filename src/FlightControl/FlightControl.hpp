@@ -9,7 +9,8 @@
  * @enum FlightPhase
  * @brief Current phase of the flight.
  */
-enum FlightPhase {
+enum FlightPhase
+{
     Idle, /**< Rocket is waiting to be put in launch detect state */
     LaunchDetection, /**< Launch detect phase */
     PoweredFlight, /**< Motor is burning and accelerating the rocket */
@@ -38,16 +39,17 @@ private:
     bool UnpoweredFlight();
     bool TouchedDown();
 
-    SensorData& sensors_;
+    SensorData &sensors_;
     FlightPhase phase_;
 
     double lastAccelerationDifference_;
+    double lastAcceleration_;
     double lastAltitude;
     double maxAltitude_;
     uint8_t counter_;
 
     ServoControl recoveryServo_;
-    static double LengthVector(const sensors_vec_t &accelAxis) ;
+    static double LengthVector(const sensors_vec_t &accelAxis);
 };
 
 
