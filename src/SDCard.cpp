@@ -20,11 +20,11 @@ bool SDCard::initSuccessful = false;
  *
  * Uses the SD_SCK, SD_MISO, SD_MOSI, SD_CS pins to set the correct SPI and the SD_CS for the SD library.
  */
-void SDCard::Begin()
+void SDCard::Begin(SPIClass &spi)
 {
     UtilityFunctions::EnableSDSPI();
 
-    if (!SD.begin(SD_CS))
+    if (!SD.begin(SD_CS, spi))
     {
         initSuccessful = false;
         slog_e("Card Mount Failed");

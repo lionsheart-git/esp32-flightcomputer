@@ -26,20 +26,24 @@ void setup()
     // Start RealTimeClock
     RTC.Begin();
 
-    SPI.begin(SD_SCK, SD_MISO, SD_MOSI);
+    // SPI.begin(SD_SCK, SD_MISO, SD_MOSI);
+
+    SPIClass sdSpi = SPIClass(VSPI);
+    sdSpi.begin(SD_SCK, SD_MISO, SD_MOSI, SD_CS);
+    pinMode(sdSpi.pinSS(), OUTPUT);
 
     // Starting SD Card
-    SDCard::Begin();
+    SDCard::Begin(sdSpi);
 
     // Starting and calibrating Sensors
     Sensors.Begin();
     Sensors.Calibrate();
-
-//    SPIClass loraSpi(HSPI);
-//    loraSpi.setClockDivider(32);
-//    loraSpi.begin(LoRa_SCK, LoRa_MISO, LoRa_MOSI, LoRa_CS);
 //
-//      LoRaCommunication lora = LoRaCommunication(SPI);
+    SPIClass loraSpi(HSPI);
+    loraSpi.setClockDivider(32);
+    loraSpi.begin(LoRa_SCK, LoRa_MISO, LoRa_MOSI, LoRa_CS);
+    pinMode(sdSpi.pinSS(), OUTPUT);
+    LoRaCommunication lora = LoRaCommunication(SPI);
 
     // Starting flight control
     FlightControl fc = FlightControl(Sensors);
@@ -81,7 +85,7 @@ void setup()
                  Sensors.Acceleration().x, Sensors.Acceleration().y, Sensors.Acceleration().z,
                  Sensors.Gyro().x, Sensors.Gyro().y, Sensors.Gyro().z);
 
-//         lora.transmit(message);
+         lora.transmit(message);
 
         Sensors.SmartDelay(1000);
     }

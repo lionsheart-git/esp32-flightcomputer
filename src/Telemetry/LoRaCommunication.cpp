@@ -8,13 +8,14 @@
 #include "Utility/UtilityFunctions.hpp"
 
 LoRaCommunication::LoRaCommunication(SPIClass & spi)
-        : radio(new Module(LoRa_CS, LoRa_DIO0, LoRa_RST))
+        : radio(new Module(LoRa_CS, LoRa_DIO0, LoRa_RST, RADIOLIB_NC, spi))
 {
     UtilityFunctions::EnableLoRaSPI();
 
     // initialize SX1278 with default settings
     Serial.print(F("[RFM95W] Initializing ... "));
-    int state = radio.begin(868.0, 125.0, 9, 7, RADIOLIB_SX127X_SYNC_WORD, 10, 8, 0);
+    // int state = radio.begin(868.0, 125.0, 9, 7, RADIOLIB_SX127X_SYNC_WORD, 10, 8, 0);
+    int state = radio.begin();
     delay(1);
     if (state == RADIOLIB_ERR_NONE)
     {

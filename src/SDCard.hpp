@@ -7,6 +7,7 @@
 #define FLIGHTCOMPUTER_SDCARD_HPP
 
 #include <FS.h>
+#include <SPI.h>
 
 /**
  * @class SDCard
@@ -28,7 +29,7 @@ public:
     static void RenameFile(FS &fs, const char *path1, const char *path2);
     static void DeleteFile(FS &fs, const char *path);
     static void TestFileIO(FS &fs, const char *path);
-    static void Begin();
+    static void Begin(SPIClass &spi);
 
     static bool initSuccessful;
 };
