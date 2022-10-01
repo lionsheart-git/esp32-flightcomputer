@@ -12,6 +12,14 @@ class UtilityFunctions
 {
 public:
     static void ScanI2CDevice(TwoWire* wireInstance = &Wire);
+
+    static void EnableLoRaSPI();
+
+    static void EnableSDSPI();
+
+    static void DisableLoRaSPI();
+
+    static void DisableSDSPI();
 };
 
 

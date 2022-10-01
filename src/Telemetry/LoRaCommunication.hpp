@@ -8,7 +8,7 @@
 class LoRaCommunication
 {
 public:
-    LoRaCommunication();
+    LoRaCommunication(SPIClass & spi);
 
     bool transmit(const char * str);
 

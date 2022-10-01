@@ -5,13 +5,17 @@
 
 #include "PinConfiguration.hpp"
 #include "Logging/SystemLogger.hpp"
+#include "Utility/UtilityFunctions.hpp"
 
-LoRaCommunication::LoRaCommunication()
-        : radio(new Module(LoRa_CS, RADIOLIB_NC, RADIOLIB_NC))
+LoRaCommunication::LoRaCommunication(SPIClass & spi)
+        : radio(new Module(LoRa_CS, LoRa_DIO0, LoRa_RST))
 {
+    UtilityFunctions::EnableLoRaSPI();
+
     // initialize SX1278 with default settings
     Serial.print(F("[RFM95W] Initializing ... "));
     int state = radio.begin(868.0, 125.0, 9, 7, RADIOLIB_SX127X_SYNC_WORD, 10, 8, 0);
+    delay(1);
     if (state == RADIOLIB_ERR_NONE)
     {
         Serial.println(F("success!"));
@@ -20,10 +24,14 @@ LoRaCommunication::LoRaCommunication()
         Serial.print(F("failed, code "));
         Serial.println(state);
     }
+
+    UtilityFunctions::DisableLoRaSPI();
 }
 
 bool LoRaCommunication::transmit(const char * str)
 {
+    UtilityFunctions::EnableLoRaSPI();
+
     int state = radio.transmit(str);
     if (state == RADIOLIB_ERR_NONE) {
         // the packet was successfully transmitted
@@ -33,6 +41,8 @@ bool LoRaCommunication::transmit(const char * str)
         Serial.print(F("[RFM95W] Datarate:\t"));
         Serial.print(radio.getDataRate());
         Serial.println(F(" bps"));
+
+        UtilityFunctions::DisableLoRaSPI();
 
         return true;
 
@@ -50,6 +60,8 @@ bool LoRaCommunication::transmit(const char * str)
         Serial.println(state);
 
     }
+
+    UtilityFunctions::DisableLoRaSPI();
 
     return false;
 }

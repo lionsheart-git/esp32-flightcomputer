@@ -1,6 +1,8 @@
 
 #include "UtilityFunctions.hpp"
 
+#include "PinConfiguration.hpp"
+
 void UtilityFunctions::ScanI2CDevice(TwoWire *wireInstance)
 {
     byte error, address;
@@ -37,4 +39,26 @@ void UtilityFunctions::ScanI2CDevice(TwoWire *wireInstance)
     {
         dlogn("done");
     }
+}
+
+void UtilityFunctions::EnableSDSPI()
+{
+    digitalWrite(LoRa_CS, HIGH);
+    digitalWrite(SD_CS, LOW);
+}
+
+void UtilityFunctions::EnableLoRaSPI()
+{
+    digitalWrite(SD_CS, HIGH);
+    digitalWrite(LoRa_CS, LOW);
+}
+
+void UtilityFunctions::DisableLoRaSPI()
+{
+    digitalWrite(LoRa_CS, HIGH);
+}
+
+void UtilityFunctions::DisableSDSPI()
+{
+    digitalWrite(SD_CS, HIGH);
 }

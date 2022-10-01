@@ -9,6 +9,7 @@
 
 #include "PinConfiguration.hpp"
 #include "Logging/SystemLogger.hpp"
+#include "Utility/UtilityFunctions.hpp"
 
 bool SDCard::initSuccessful = false;
 
@@ -21,7 +22,7 @@ bool SDCard::initSuccessful = false;
  */
 void SDCard::Begin()
 {
-    SPI.begin(SD_SCK, SD_MISO, SD_MOSI);
+    UtilityFunctions::EnableSDSPI();
 
     if (!SD.begin(SD_CS))
     {
@@ -42,6 +43,8 @@ void SDCard::Begin()
     initSuccessful = true;
 
     slog_i("Hello SD card.");
+
+    UtilityFunctions::DisableSDSPI();
 }
 
 /**
@@ -54,6 +57,8 @@ void SDCard::Begin()
 void SDCard::ListDir(FS &fs, const char *dirname, uint8_t levels)
 {
     slog_d("Listing directory: %s", dirname);
+
+    UtilityFunctions::EnableSDSPI();
 
     File root = fs.open(dirname);
     if (!root)
@@ -86,6 +91,8 @@ void SDCard::ListDir(FS &fs, const char *dirname, uint8_t levels)
         }
         file = root.openNextFile();
     }
+
+    UtilityFunctions::DisableSDSPI();
 }
 
 /**
@@ -96,6 +103,8 @@ void SDCard::ListDir(FS &fs, const char *dirname, uint8_t levels)
  */
 void SDCard::CreateDir(fs::FS &fs, const char *path)
 {
+    UtilityFunctions::EnableSDSPI();
+
     slog_d("Creating Dir: %s", path);
     if (fs.mkdir(path))
     {
@@ -105,6 +114,8 @@ void SDCard::CreateDir(fs::FS &fs, const char *path)
         initSuccessful = false;
         slog_e("mkdir %s failed", path);
     }
+
+    UtilityFunctions::DisableSDSPI();
 }
 
 /**
@@ -115,6 +126,8 @@ void SDCard::CreateDir(fs::FS &fs, const char *path)
  */
 void SDCard::RemoveDir(fs::FS &fs, const char *path)
 {
+    UtilityFunctions::EnableSDSPI();
+
     slog_d("Removing Dir: %s.", path);
     if (fs.rmdir(path))
     {
@@ -124,6 +137,8 @@ void SDCard::RemoveDir(fs::FS &fs, const char *path)
         initSuccessful = false;
         slog_e("rmdir %s failed", path);
     }
+
+    UtilityFunctions::DisableSDSPI();
 }
 
 /**
@@ -134,6 +149,8 @@ void SDCard::RemoveDir(fs::FS &fs, const char *path)
  */
 void SDCard::ReadFile(fs::FS &fs, const char *path)
 {
+    UtilityFunctions::EnableSDSPI();
+
     slog_d("Reading file: %s.", path);
 
     File file = fs.open(path);
@@ -150,6 +167,8 @@ void SDCard::ReadFile(fs::FS &fs, const char *path)
         Serial.write(file.read());
     }
     file.close();
+
+    UtilityFunctions::DisableSDSPI();
 }
 
 /**
@@ -163,6 +182,8 @@ void SDCard::ReadFile(fs::FS &fs, const char *path)
  */
 void SDCard::WriteFile(fs::FS &fs, const char *path, const char *message)
 {
+    UtilityFunctions::EnableSDSPI();
+
     File file = fs.open(path, FILE_WRITE);
     if (!file)
     {
@@ -177,6 +198,8 @@ void SDCard::WriteFile(fs::FS &fs, const char *path, const char *message)
 
     }
     file.close();
+
+    UtilityFunctions::DisableSDSPI();
 }
 
 /**
@@ -190,6 +213,8 @@ void SDCard::WriteFile(fs::FS &fs, const char *path, const char *message)
  */
 void SDCard::AppendFile(fs::FS &fs, const char *path, const char *message)
 {
+    UtilityFunctions::EnableSDSPI();
+
     File file = fs.open(path, FILE_APPEND);
     if (!file)
     {
@@ -204,6 +229,8 @@ void SDCard::AppendFile(fs::FS &fs, const char *path, const char *message)
         slog_e("Append %s to %s failed.", message, path);
     }
     file.close();
+
+    UtilityFunctions::DisableSDSPI();
 }
 
 /**
@@ -215,6 +242,8 @@ void SDCard::AppendFile(fs::FS &fs, const char *path, const char *message)
  */
 void SDCard::RenameFile(fs::FS &fs, const char *path1, const char *path2)
 {
+    UtilityFunctions::EnableSDSPI();
+
     if (fs.rename(path1, path2))
     {
         slog_i("File %s renamed to %s.", path1, path2);
@@ -223,6 +252,8 @@ void SDCard::RenameFile(fs::FS &fs, const char *path1, const char *path2)
         initSuccessful = false;
         slog_e("Rename %s to  %s failed.", path1, path2);
     }
+
+    UtilityFunctions::DisableSDSPI();
 }
 
 /**
@@ -233,6 +264,8 @@ void SDCard::RenameFile(fs::FS &fs, const char *path1, const char *path2)
  */
 void SDCard::DeleteFile(fs::FS &fs, const char *path)
 {
+    UtilityFunctions::EnableSDSPI();
+
     if (fs.remove(path))
     {
         slog_i("File %s deleted.", path);
@@ -241,6 +274,8 @@ void SDCard::DeleteFile(fs::FS &fs, const char *path)
         initSuccessful = false;
         slog_e("Delete %s failed.", path);
     }
+
+    UtilityFunctions::DisableSDSPI();
 }
 
 /**
@@ -251,6 +286,8 @@ void SDCard::DeleteFile(fs::FS &fs, const char *path)
  */
 void SDCard::TestFileIO(fs::FS &fs, const char *path)
 {
+    UtilityFunctions::EnableSDSPI();
+
     File file = fs.open(path);
     static uint8_t buf[512];
     size_t len = 0;
@@ -298,4 +335,6 @@ void SDCard::TestFileIO(fs::FS &fs, const char *path)
     end = millis() - start;
     slog_i("%u bytes written for %u ms.", 2048 * 512, end);
     file.close();
+
+    UtilityFunctions::DisableSDSPI();
 }
