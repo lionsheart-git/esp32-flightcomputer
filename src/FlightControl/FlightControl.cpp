@@ -52,7 +52,7 @@ void FlightControl::CheckFlight()
  */
 bool FlightControl::isApogee()
 {
-    double currentAltitude = sensors_.AltitudeAboveGround();
+    double currentAltitude = sensors_.FilteredAltitudeAboveGround();
 
     if (maxAltitude_ + ALTITUDE_THRESHOLD < currentAltitude) {
         maxAltitude_ = currentAltitude;
@@ -87,9 +87,14 @@ double FlightControl::MaxAltitude() const
     return maxAltitude_;
 }
 
+/**
+ * @brief Detects launch by acceleration and height.
+ *
+ * @return True, if a launch happened.
+ */
 bool FlightControl::LaunchDetected()
 {
-    double currentAltitude = sensors_.AltitudeAboveGround();
+    double currentAltitude = sensors_.FilteredAltitudeAboveGround();
 
     if (currentAltitude > LAUNCH_DETECT_ALTITUDE) {
         return true;
