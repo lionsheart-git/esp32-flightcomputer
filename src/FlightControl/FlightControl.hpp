@@ -35,10 +35,12 @@ public:
 private:
     bool isApogee();
     bool LaunchDetected();
+    bool TouchedDown();
 
     SensorData& sensors_;
     FlightPhase phase_;
 
+    double lastAltitude;
     double maxAltitude_;
     uint8_t counter_;
 

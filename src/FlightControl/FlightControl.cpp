@@ -35,6 +35,10 @@ void FlightControl::CheckFlight()
 
         phase_ = FlightPhase::Descend;
     }
+
+    if (phase_ >= FlightPhase::Descend && TouchedDown()) {
+        phase_ = FlightPhase::TouchedDown;
+    }
 }
 
 /**
@@ -55,6 +59,7 @@ bool FlightControl::isApogee()
         counter_ = 0;
     } else if (currentAltitude + ALTITUDE_THRESHOLD < maxAltitude_ && counter_ > 10) {
         slog_i("Apogee detected!");
+        counter_ = 0;
         return true;
     } else if (currentAltitude + ALTITUDE_THRESHOLD < maxAltitude_) {
         counter_++;
@@ -98,5 +103,26 @@ bool FlightControl::LaunchDetected()
         return true;
     }
 
+    return false;
+}
+
+/**
+ * @brief Detects the touch down at the end of descend.
+ *
+ * @return True, if touch down detected.
+ */
+bool FlightControl::TouchedDown()
+{
+    double currentAltitude = sensors_.FilteredAltitudeAboveGround();
+
+    double altitudeDifference = std::abs(lastAltitude - currentAltitude);
+
+    if (lastAltitude == 0) {
+        lastAltitude = currentAltitude;
+    } else if (altitudeDifference < ALTITUDE_THRESHOLD && counter_ > 10) {
+        return true;
+    } else if (altitudeDifference < ALTITUDE_THRESHOLD) {
+        counter_++;
+    }
     return false;
 }
