@@ -4,6 +4,8 @@
 #include "Logging/SystemLogger.hpp"
 
 #define ALTITUDE_THRESHOLD 2
+#define LAUNCH_DETECT_ALTITUDE 24
+#define LAUNCH_DETECT_ACCELERATION 30
 
 /**
  * @brief New FlightControl with sensors to retrieve data from.
@@ -23,6 +25,9 @@ FlightControl::FlightControl(SensorData &sensors)
  */
 void FlightControl::CheckFlight()
 {
+    if (phase_ < FlightPhase::PoweredFlight && LaunchDetected()) {
+        phase_ = FlightPhase::PoweredFlight;
+    }
 
     if (phase_ < FlightPhase::Descend && isApogee()) {
         slog_i("Eject Recovery");
@@ -48,7 +53,7 @@ bool FlightControl::isApogee()
     if (maxAltitude_ + ALTITUDE_THRESHOLD < currentAltitude) {
         maxAltitude_ = currentAltitude;
         counter_ = 0;
-    } else if (currentAltitude + ALTITUDE_THRESHOLD < maxAltitude_ && counter_ > 100) {
+    } else if (currentAltitude + ALTITUDE_THRESHOLD < maxAltitude_ && counter_ > 10) {
         slog_i("Apogee detected!");
         return true;
     } else if (currentAltitude + ALTITUDE_THRESHOLD < maxAltitude_) {
@@ -75,4 +80,23 @@ FlightPhase FlightControl::Phase() const
 double FlightControl::MaxAltitude() const
 {
     return maxAltitude_;
+}
+
+bool FlightControl::LaunchDetected()
+{
+    double currentAltitude = sensors_.AltitudeAboveGround();
+
+    if (currentAltitude > LAUNCH_DETECT_ALTITUDE) {
+        return true;
+    }
+
+    sensors_vec_t accelAxis = sensors_.Acceleration();
+
+    double acceleration = std::sqrt(std::pow(accelAxis.x, 2) + std::pow(accelAxis.y, 2) + std::pow(accelAxis.z, 2));
+
+    if (acceleration > LAUNCH_DETECT_ACCELERATION) {
+        return true;
+    }
+
+    return false;
 }

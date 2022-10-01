@@ -34,6 +34,7 @@ public:
 
 private:
     bool isApogee();
+    bool LaunchDetected();
 
     SensorData& sensors_;
     FlightPhase phase_;
