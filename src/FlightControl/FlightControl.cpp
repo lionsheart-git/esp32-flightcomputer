@@ -102,13 +102,18 @@ bool FlightControl::LaunchDetected()
 
     sensors_vec_t accelAxis = sensors_.Acceleration();
 
-    double acceleration = std::sqrt(std::pow(accelAxis.x, 2) + std::pow(accelAxis.y, 2) + std::pow(accelAxis.z, 2));
+    double acceleration = LengthVector(accelAxis);
 
     if (acceleration > LAUNCH_DETECT_ACCELERATION) {
         return true;
     }
 
     return false;
+}
+
+double FlightControl::LengthVector(const sensors_vec_t &accelAxis)
+{
+    return sqrt(std::pow(accelAxis.x, 2) + std::pow(accelAxis.y, 2) + std::pow(accelAxis.z, 2));
 }
 
 /**
@@ -129,5 +134,10 @@ bool FlightControl::TouchedDown()
     } else if (altitudeDifference < ALTITUDE_THRESHOLD) {
         counter_++;
     }
+    return false;
+}
+
+bool FlightControl::UnpoweredFlight()
+{
     return false;
 }

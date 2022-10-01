@@ -35,16 +35,19 @@ public:
 private:
     bool isApogee();
     bool LaunchDetected();
+    bool UnpoweredFlight();
     bool TouchedDown();
 
     SensorData& sensors_;
     FlightPhase phase_;
 
+    double lastAcceleration_;
     double lastAltitude;
     double maxAltitude_;
     uint8_t counter_;
 
     ServoControl recoveryServo_;
+    static double LengthVector(const sensors_vec_t &accelAxis) ;
 };
 
 
