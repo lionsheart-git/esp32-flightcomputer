@@ -10,8 +10,11 @@
 #include "RealTimeClock.hpp"
 
 #include "FlightControl/FlightControl.hpp"
+#include "Telemetry/LoRaCommunication.hpp"
 
 #include <Utility/UtilityFunctions.hpp>
+
+#define  RADIOLIB_DEBUG
 
 void setup()
 {
@@ -23,6 +26,8 @@ void setup()
     // Start RealTimeClock
     RTC.Begin();
 
+    SPI.begin(SD_SCK, SD_MISO, SD_MOSI);
+
     // Starting SD Card
     SDCard::Begin();
 
@@ -30,8 +35,16 @@ void setup()
     Sensors.Begin();
     Sensors.Calibrate();
 
+//    SPIClass loraSpi(HSPI);
+//    loraSpi.setClockDivider(32);
+//    loraSpi.begin(LoRa_SCK, LoRa_MISO, LoRa_MOSI, LoRa_CS);
+//
+//      LoRaCommunication lora = LoRaCommunication(SPI);
+
     // Starting flight control
     FlightControl fc = FlightControl(Sensors);
+
+    char message[250];
 
     // Main loop
     while (true)
@@ -54,12 +67,21 @@ void setup()
         printf("Max Altitude: %.2f m\n", fc.MaxAltitude());
         printf("Phase: %d\n", fc.Phase());
 
-        dlogn("%s;%f;%f;%lu;%lu;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;", RTC.Timestamp(), Sensors.GNSS_Latitude(),
+        dlogn("%s;%f;%f;%u;%d;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;", RTC.Timestamp(), Sensors.GNSS_Latitude(),
               Sensors.GNSS_Longitude(), Sensors.GNSS_Satellites(), Sensors.GNSS_HDOP(),
               Sensors.Pressure(), Sensors.FilteredPressure(), Sensors.Temperature(),
               Sensors.FilteredAltitudeAboveGround(), Sensors.AltitudeAboveGround(),
               Sensors.Acceleration().x, Sensors.Acceleration().y, Sensors.Acceleration().z,
               Sensors.Gyro().x, Sensors.Gyro().y, Sensors.Gyro().z);
+
+        snprintf(message, sizeof(message), "%s;%f;%f;%u;%d;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;", RTC.Timestamp(), Sensors.GNSS_Latitude(),
+                 Sensors.GNSS_Longitude(), Sensors.GNSS_Satellites(), Sensors.GNSS_HDOP(),
+                 Sensors.Pressure(), Sensors.FilteredPressure(), Sensors.Temperature(),
+                 Sensors.FilteredAltitudeAboveGround(), Sensors.AltitudeAboveGround(),
+                 Sensors.Acceleration().x, Sensors.Acceleration().y, Sensors.Acceleration().z,
+                 Sensors.Gyro().x, Sensors.Gyro().y, Sensors.Gyro().z);
+
+//         lora.transmit(message);
 
         Sensors.SmartDelay(1000);
     }
