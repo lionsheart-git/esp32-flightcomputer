@@ -3,7 +3,7 @@
 
 #include "Logging/SystemLogger.hpp"
 
-#define ALTITUDE_THRESHOLD 2
+#define ALTITUDE_THRESHOLD 5
 #define LAUNCH_DETECT_ALTITUDE 24
 #define LAUNCH_DETECT_ACCELERATION 30
 
@@ -109,6 +109,7 @@ bool FlightControl::LaunchDetected()
 
     if (currentAltitude > LAUNCH_DETECT_ALTITUDE)
     {
+        slog_i("Launch detected with altitude: %.2f", currentAltitude);
         return true;
     }
 
@@ -118,6 +119,7 @@ bool FlightControl::LaunchDetected()
 
     if (acceleration > LAUNCH_DETECT_ACCELERATION)
     {
+        slog_i("Launch detected with acceleration: %.2f", acceleration);
         return true;
     }
 
