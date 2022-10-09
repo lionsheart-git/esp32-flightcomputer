@@ -91,7 +91,7 @@ void setup()
         else {
             Serial.println("No input.");
         }
-        delay(1000);
+        Sensors.SmartDelay(1000);
     }
 
     // Calibrate sensors
