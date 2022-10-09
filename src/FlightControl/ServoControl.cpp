@@ -51,10 +51,29 @@ void ServoControl::close()
         delay(15);                       // waits 15ms for the servo to reach the position
     }
 
-//    servo_.write(maxPosition_);
-//    delay(15);
-
     servo_.detach();
+}
+
+void ServoControl::SetMaxPosition(int degrees)
+{
+    if (degrees < 0 || degrees > 180 || degrees < minPosition_) {
+        slog_w("Can not set the max position to %d degrees.", degrees);
+        return;
+    }
+
+    maxPosition_ = degrees;
+    slog_i("Set servo max position to %d degrees.", maxPosition_);
+}
+
+void ServoControl::SetMinPosition(int degrees)
+{
+    if (degrees < 0 || degrees > 180 || degrees > maxPosition_) {
+        slog_w("Can not set the min position to %d degrees.", degrees);
+        return;
+    }
+
+    minPosition_ = degrees;
+    slog_i("Set servo min position to %d degrees.", minPosition_);
 }
 
 

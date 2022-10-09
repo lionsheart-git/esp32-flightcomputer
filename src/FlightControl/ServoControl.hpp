@@ -6,12 +6,15 @@
 class ServoControl
 {
 public:
-    ServoControl(int pin, int minPosition = 0, int maxPosition = 180);
+    explicit ServoControl(int pin, int minPosition = 0, int maxPosition = 180);
 
     void write(int degrees);
 
     void open();
     void close();
+
+    void SetMaxPosition(int degrees);
+    void SetMinPosition(int degrees);
 
 private:
     int pin_;
