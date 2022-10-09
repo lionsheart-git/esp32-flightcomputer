@@ -32,6 +32,11 @@ public:
     FlightPhase Phase() const;
     double MaxAltitude() const;
 
+    void OpenRecovery();
+    void CloseRecovery();
+    void ServoMinPosition(int degrees);
+    void ServoMaxPosition(int degrees);
+
 
 private:
     bool isApogee();

@@ -119,6 +119,13 @@ bool FlightControl::LaunchDetected()
 
     if (acceleration > LAUNCH_DETECT_ACCELERATION)
     {
+        if (counter_ < 10)
+        {
+            counter_++;
+            return false;
+        }
+
+        counter_ = 0;
         slog_i("Launch detected with acceleration: %.2f", acceleration);
         return true;
     }
@@ -189,4 +196,24 @@ bool FlightControl::UnpoweredFlight()
         counter_++;
     }
     return false;
+}
+
+void FlightControl::OpenRecovery()
+{
+    recoveryServo_.open();
+}
+
+void FlightControl::CloseRecovery()
+{
+    recoveryServo_.close();
+}
+
+void FlightControl::ServoMinPosition(int degrees)
+{
+    recoveryServo_.SetMinPosition(degrees);
+}
+
+void FlightControl::ServoMaxPosition(int degrees)
+{
+    recoveryServo_.SetMaxPosition(degrees);
 }
