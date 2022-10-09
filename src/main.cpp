@@ -130,17 +130,17 @@ void setup()
         printf("Acceleration X: %f, Y: %f, Z: %f m/s^2\n", Sensors.Acceleration().x, Sensors.Acceleration().y,
                Sensors.Acceleration().z);
         printf("Rotation X: %f, Y: %f, Z: %f\n", Sensors.Gyro().x, Sensors.Gyro().y, Sensors.Gyro().z);
-
-        fc.CheckFlight();
         printf("Max Altitude: %.2f m\n", fc.MaxAltitude());
         printf("Phase: %d\n", fc.Phase());
 
-        dlogn("%s;%f;%f;%u;%d;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;", RTC.Timestamp(), Sensors.GNSS_Latitude(),
+        fc.CheckFlight();
+
+        dlogn("%s;%f;%f;%u;%d;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%.2f;%d;", RTC.Timestamp(), Sensors.GNSS_Latitude(),
               Sensors.GNSS_Longitude(), Sensors.GNSS_Satellites(), Sensors.GNSS_HDOP(),
               Sensors.Pressure(), Sensors.FilteredPressure(), Sensors.Temperature(),
               Sensors.FilteredAltitudeAboveGround(), Sensors.AltitudeAboveGround(),
               Sensors.Acceleration().x, Sensors.Acceleration().y, Sensors.Acceleration().z,
-              Sensors.Gyro().x, Sensors.Gyro().y, Sensors.Gyro().z);
+              Sensors.Gyro().x, Sensors.Gyro().y, Sensors.Gyro().z, fc.MaxAltitude(), fc.Phase());
 
         snprintf(message, sizeof(message), "%s;%f;%f;%u;%d;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;", RTC.Timestamp(), Sensors.GNSS_Latitude(),
                  Sensors.GNSS_Longitude(), Sensors.GNSS_Satellites(), Sensors.GNSS_HDOP(),
