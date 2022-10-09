@@ -38,12 +38,6 @@ void setup()
     // Starting sensors
     Sensors.Begin();
 
-//    SPIClass loraSpi(HSPI);
-//    loraSpi.setClockDivider(32);
-//    loraSpi.begin(LoRa_SCK, LoRa_MISO, LoRa_MOSI, LoRa_CS);
-//    pinMode(sdSpi.pinSS(), OUTPUT);
-//    LoRaCommunication lora = LoRaCommunication(SPI);
-
     // Starting flight control
     FlightControl fc = FlightControl(Sensors);
 
@@ -102,17 +96,6 @@ void setup()
 
     // Calibrate sensors
     Sensors.Calibrate();
-//
-    SPIClass loraSpi(HSPI);
-    loraSpi.setClockDivider(32);
-    loraSpi.begin(LoRa_SCK, LoRa_MISO, LoRa_MOSI, LoRa_CS);
-    pinMode(sdSpi.pinSS(), OUTPUT);
-    LoRaCommunication lora = LoRaCommunication(SPI);
-
-    // Starting flight control
-    FlightControl fc = FlightControl(Sensors);
-
-    char message[250];
 
     // Main loop
     while (true)
@@ -141,15 +124,6 @@ void setup()
               Sensors.FilteredAltitudeAboveGround(), Sensors.AltitudeAboveGround(),
               Sensors.Acceleration().x, Sensors.Acceleration().y, Sensors.Acceleration().z,
               Sensors.Gyro().x, Sensors.Gyro().y, Sensors.Gyro().z, fc.MaxAltitude(), fc.Phase());
-
-        snprintf(message, sizeof(message), "%s;%f;%f;%u;%d;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;", RTC.Timestamp(), Sensors.GNSS_Latitude(),
-                 Sensors.GNSS_Longitude(), Sensors.GNSS_Satellites(), Sensors.GNSS_HDOP(),
-                 Sensors.Pressure(), Sensors.FilteredPressure(), Sensors.Temperature(),
-                 Sensors.FilteredAltitudeAboveGround(), Sensors.AltitudeAboveGround(),
-                 Sensors.Acceleration().x, Sensors.Acceleration().y, Sensors.Acceleration().z,
-                 Sensors.Gyro().x, Sensors.Gyro().y, Sensors.Gyro().z);
-
-         lora.transmit(message);
 
         Sensors.SmartDelay(1000);
     }
