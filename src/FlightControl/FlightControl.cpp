@@ -14,7 +14,7 @@
  */
 FlightControl::FlightControl(SensorData &sensors)
         : sensors_(sensors), phase_(FlightPhase::Idle), maxAltitude_(0.0), counter_(0),
-          recoveryServo_(SERVO_PWM, 10, 150)
+          recoveryServo_(SERVO_PWM, 70, 180)
 {
     slog_i("Started flight control.");
 }

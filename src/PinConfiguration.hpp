@@ -11,10 +11,10 @@
 #define  SPI1_MISO 12
 #define  SPI1_MOSI 14
 
-#define LoRa_SCK  SPI1_SCK /**< @brief Used by LoRa module */
+#define LoRa_SCK  4 /**< @brief Used by LoRa module */
 #define LoRa_CS 19 /**< @brief Used by LoRa module */
-#define LoRa_MISO SPI1_MISO /**< @brief Used by LoRa module */
-#define LoRa_MOSI SPI1_MOSI /**< @brief Used by LoRa module */
+#define LoRa_MISO 5 /**< @brief Used by LoRa module */
+#define LoRa_MOSI 23 /**< @brief Used by LoRa module */
 #define LoRa_DIO0 17 /**< @brief Used by LoRa module */
 #define LoRa_RST 18  /**< @brief Used by LoRa module */
 

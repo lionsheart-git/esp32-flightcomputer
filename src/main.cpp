@@ -125,7 +125,7 @@ void setup()
               Sensors.Acceleration().x, Sensors.Acceleration().y, Sensors.Acceleration().z,
               Sensors.Gyro().x, Sensors.Gyro().y, Sensors.Gyro().z, fc.MaxAltitude(), fc.Phase());
 
-        Sensors.SmartDelay(1000);
+        Sensors.SmartDelay(100);
     }
 }
 
