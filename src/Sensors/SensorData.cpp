@@ -45,9 +45,6 @@ void SensorData::Begin()
     mpu6050_.setGyroRange(MPU6050_RANGE_500_DEG);
     mpu6050_.setFilterBandwidth(MPU6050_BAND_21_HZ);
 
-    // Initialize GPS serial
-    // gpsSerial_.begin(9600, SERIAL_8N1, GPS_RX, GPS_TX);
-
     // Give all sensors time to come online.
     SmartDelay(5000);
 
