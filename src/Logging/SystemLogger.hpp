@@ -94,7 +94,7 @@
  * @param format Format string for varargs.
  */
 #ifndef S_LOG_FORMAT//(letter, format)
-#define S_LOG_FORMAT(letter, format) "[" #letter "][%s:%u] %s(): " format "\r\n", Logging::Logger::PathToFileName(__FILE__), __LINE__, __FUNCTION__
+#define S_LOG_FORMAT(letter, format) "[%ld][" #letter "][%s:%u] %s(): " format "\r\n", millis(), Logging::Logger::PathToFileName(__FILE__), __LINE__, __FUNCTION__
 #endif
 
 /**
