@@ -70,6 +70,16 @@ void setup()
             {
                 fc.CloseRecovery();
             }
+            else if (substring == "SV+TEST")
+            {
+                while (true)
+                {
+                    fc.CloseRecovery();
+                    delay(100);
+                    fc.OpenRecovery();
+                    delay(100);
+                }
+            }
             else if (substring == "SV+MAX")
             {
                 substring = input.substring(index + 1);
