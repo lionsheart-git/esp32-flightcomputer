@@ -12,7 +12,7 @@
 #include "BarometricSensor.hpp"
 
 SensorData::SensorData()
-        : gps_(), pressureKalman_(1.12184278324081e-4, 1e-5), gpsKalman_(10.0, 1e-5) //gpsSerial_(2)
+        : gps_(), pressureKalman_(1.12184278324081e-4, 1e-7), gpsKalman_(10.0, 1e-7) //gpsSerial_(2)
 {
 }
 
@@ -188,6 +188,16 @@ double SensorData::GNSS_Longitude()
 double SensorData::GNSS_Altitude()
 {
     return gps_.altitude.meters();
+}
+
+/**
+ * @brief Speed by GNSS.
+ *
+ * @return The current speed by the GNSS.
+ */
+double SensorData::GNSS_Speed()
+{
+    return gps_.speed.mps();
 }
 
 /**

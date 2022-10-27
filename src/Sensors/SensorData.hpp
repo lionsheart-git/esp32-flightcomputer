@@ -37,6 +37,7 @@ public:
     double GNSS_Latitude();
     double GNSS_Longitude();
     double GNSS_Altitude();
+    double GNSS_Speed();
     float FilteredGNSSAltitude();
 
     // Environment
