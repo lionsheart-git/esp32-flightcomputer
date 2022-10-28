@@ -4,6 +4,7 @@
 #include "Logging/DataLogger.hpp"
 
 #include "PinConfiguration.hpp"
+#include "Constants.hpp"
 #include "SDCard.hpp"
 
 #include "Sensors/SensorData.hpp"
@@ -13,8 +14,6 @@
 #include "Telemetry/LoRaCommunication.hpp"
 
 #include <Utility/UtilityFunctions.hpp>
-
-#define  RADIOLIB_DEBUG
 
 void setup()
 {
@@ -141,14 +140,14 @@ void setup()
 
         fc.CheckFlight();
 
-        dlogn("%s;%f;%f;%u;%d;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%.2f;%d;", RTC.Timestamp(), Sensors.GNSS_Latitude(),
-              Sensors.GNSS_Longitude(), Sensors.GNSS_Satellites(), Sensors.GNSS_HDOP(),
+        dlogn("%s;%f;%f;%u;%f;%f;%d;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%f;%.2f;%d;", RTC.Timestamp(), Sensors.GNSS_Latitude(),
+              Sensors.GNSS_Longitude(), Sensors.GNSS_Satellites(), Sensors.GNSS_Altitude(), Sensors.GNSS_Speed(), Sensors.GNSS_HDOP(),
               Sensors.Pressure(), Sensors.FilteredPressure(), Sensors.Temperature(),
               Sensors.FilteredAltitudeAboveGround(), Sensors.AltitudeAboveGround(),
               Sensors.Acceleration().x, Sensors.Acceleration().y, Sensors.Acceleration().z,
               Sensors.Gyro().x, Sensors.Gyro().y, Sensors.Gyro().z, fc.MaxAltitude(), fc.Phase());
 
-        Sensors.SmartDelay(100);
+        Sensors.SmartDelay(1000 / LOGGING_FREQUENCY_HZ);
     }
 }
 
