@@ -17,4 +17,14 @@
 #define EPSILON 1E-4
 #endif
 
+/**
+ * @def LOGGING_FREQUENCY_HZ
+ * @brief Logging frequency in hz.
+ *
+ * Is used throughout the program for delay calculation and thresholds.
+ */
+#ifndef LOGGING_FREQUENCY_HZ
+#define LOGGING_FREQUENCY_HZ 40
+#endif
+
 #endif //FLIGHTCOMPUTER_CONSTANTS_HPP
