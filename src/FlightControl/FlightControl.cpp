@@ -2,6 +2,7 @@
 #include "FlightControl.hpp"
 
 #include "Logging/SystemLogger.hpp"
+#include "Constants.hpp"
 
 #define ALTITUDE_THRESHOLD 5
 #define LAUNCH_DETECT_ALTITUDE 24
@@ -66,7 +67,7 @@ bool FlightControl::isApogee()
     {
         maxAltitude_ = currentAltitude;
         counter_ = 0;
-    } else if (currentAltitude + ALTITUDE_THRESHOLD < maxAltitude_ && counter_ > 10)
+    } else if (currentAltitude + ALTITUDE_THRESHOLD < maxAltitude_ && counter_ > LOGGING_FREQUENCY_HZ)
     {
         slog_i("Apogee detected!");
         counter_ = 0;
@@ -119,7 +120,7 @@ bool FlightControl::LaunchDetected()
 
     if (acceleration > LAUNCH_DETECT_ACCELERATION)
     {
-        if (counter_ < 10)
+        if (counter_ < LOGGING_FREQUENCY_HZ)
         {
             counter_++;
             return false;
@@ -152,7 +153,7 @@ bool FlightControl::TouchedDown()
     if (lastAltitude == 0)
     {
         lastAltitude = currentAltitude;
-    } else if (altitudeDifference < ALTITUDE_THRESHOLD && counter_ > 10)
+    } else if (altitudeDifference < ALTITUDE_THRESHOLD && counter_ > LOGGING_FREQUENCY_HZ)
     {
         lastAltitude = currentAltitude;
         counter_ = 0;
@@ -183,7 +184,7 @@ bool FlightControl::UnpoweredFlight()
     {
         lastAcceleration_ = acceleration;
         lastAccelerationDifference_ = accelerationDifference;
-    } else if (accelerationDifference < accelerationDifference && counter_ > 10)
+    } else if (accelerationDifference < accelerationDifference && counter_ > LOGGING_FREQUENCY_HZ)
     {
         lastAcceleration_ = acceleration;
         lastAccelerationDifference_ = accelerationDifference;
